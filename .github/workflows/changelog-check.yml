@@ -1,0 +1,84 @@
+name: Changelog check
+
+# Enforces the Changelog Release Gate from PROJECT_PROTOCOL.md and
+# r7c-context/standards/agent-operating-standard.md: every merged change
+# must update CHANGELOG.md, unless the PR is explicitly labeled
+# `no-changelog-needed`.
+#
+# Also enforces version monotonicity: package.json version must not regress.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled, edited]
+
+jobs:
+  changelog:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-changelog-needed') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify CHANGELOG.md was updated
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if git diff --name-only "$BASE_SHA" HEAD | grep -qx "CHANGELOG.md"; then
+            echo "CHANGELOG.md was updated."
+          else
+            echo "::error file=CHANGELOG.md::CHANGELOG.md was not updated. Add an entry under [Unreleased] or apply the 'no-changelog-needed' label with a reason. See PROJECT_PROTOCOL.md → Changelog Release Gate."
+            exit 1
+          fi
+
+      - name: Verify [Unreleased] section exists
+        run: |
+          if ! grep -q "^## \[Unreleased\]" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::CHANGELOG.md is missing an '## [Unreleased]' section."
+            exit 1
+          fi
+
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check package.json exists
+        id: pkg
+        run: |
+          if [ -f package.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify version monotonicity
+        if: steps.pkg.outputs.exists == 'true'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          HEAD_VERSION=$(node -p "require('./package.json').version")
+          BASE_VERSION=$(git show "$BASE_SHA:package.json" 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{try{console.log(JSON.parse(s).version)}catch(e){console.log('')}})" || echo "")
+
+          if [ -z "$BASE_VERSION" ]; then
+            echo "Base package.json missing or unparseable — skipping version check."
+            exit 0
+          fi
+
+          if [ "$BASE_VERSION" = "$HEAD_VERSION" ]; then
+            echo "Version unchanged ($HEAD_VERSION). OK."
+            exit 0
+          fi
+
+          HIGHER=$(printf '%s\n%s\n' "$BASE_VERSION" "$HEAD_VERSION" | sort -V | tail -n1)
+          if [ "$HIGHER" != "$HEAD_VERSION" ]; then
+            echo "::error file=package.json::Version regressed: $BASE_VERSION → $HEAD_VERSION. The new version must be greater than the version on the base branch."
+            exit 1
+          fi
+
+          echo "Version bump valid: $BASE_VERSION → $HEAD_VERSION"

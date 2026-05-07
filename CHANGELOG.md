@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - **`docs/milestones.md`**: Bridge between brief and roadmap. Each milestone groups roadmap entries (`vX.Y.0`) into a shippable user-visible slice with done criteria that reference brief boundary contracts, isolation tests, and integration risks.
 - **`docs/r7c-standards.md`**: Index of R7C ecosystem standards (`r7c-context/standards/`) that this template inherits, with a mapping table from each standard to where this template implements it, and an auditable list of current divergences. Synced to downstream repos via `.github/sync-config.json`.
 - **`README.md` → Local Development section**: Operationalizes `local-first-development.md` — documents prereqs and every `npm run` command with what it does and when to use it.
+- **`.github/PULL_REQUEST_TEMPLATE.md`**: Required-fields PR template — Summary, Milestone reference, Changelog entry confirmation, Test plan, Closes/refs. Operationalizes the milestone discipline from `docs/milestones.md` and the Changelog Release Gate from `PROJECT_PROTOCOL.md`.
+- **`.github/workflows/changelog-check.yml`**: CI gate that fails any PR which doesn't update `CHANGELOG.md` or apply the `no-changelog-needed` label. Also verifies `[Unreleased]` section exists and that `package.json` version does not regress.
 
 ### Changed
 - **README.md**: Setup steps updated to reference `CHANGELOG-TEMPLATE.md` so new repos start with a populated changelog
@@ -18,6 +20,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - **`CLAUDE.md`**: Added standards-inheritance note at the top — repo-local app context never overrides ecosystem standards.
 - **`.github/sync-config.json`**: Added `docs/r7c-standards.md` to the propagation list so downstream repos inherit the standards index automatically.
 - **`docs/roadmap.md`**: Header note added clarifying the file contains only approved, implementation-ready features. Each `vX.Y.0` template entry now requires a `**Milestone**` reference linking back to `docs/milestones.md`.
+- **`CHANGELOG-TEMPLATE.md`**: Header note added pointing at the Changelog Release Gate. Empty `[Unreleased]` now has Added / Changed / Fixed / Removed sub-section scaffolds so new repos start with the right shape.
 
 ### Fixed
 - **GitLab mirror scope**: Workflow now mirrors only local branches and tags, not remote refs, preventing duplicate-ref push failures

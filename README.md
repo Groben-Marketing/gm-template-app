@@ -48,6 +48,12 @@ For full-stack dev, run `npm run dev` and `npm run dev:client` in separate termi
 5. **Rename** `CHANGELOG-TEMPLATE.md` → `CHANGELOG.md` (replace this file)
 6. **Update** `.github/sync-config.json` with your downstream repos
 7. **Set** `REPO_SYNC_TOKEN` in GitHub Actions secrets (PAT with repo write access)
+8. **Create the `no-changelog-needed` label** so the changelog-check workflow can be bypassed for non-user-facing PRs:
+   ```
+   gh label create no-changelog-needed \
+     --description "Bypasses CHANGELOG.md update check; non-user-facing PR" \
+     --color CCCCCC
+   ```
 
 ## Start with an AI agent
 
