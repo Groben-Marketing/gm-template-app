@@ -3,6 +3,18 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
+### Added
+- **GitLab mirror workflow**: `.github/workflows/mirror-to-gitlab.yml` — push-triggered Action that mirrors all branches and tags to `gitlab.com/wayfinder-digital/$REPO` using `GITLAB_MIRROR_TOKEN`
+- **`CHANGELOG-TEMPLATE.md`**: Starter changelog scaffold for new app repos created from this template
+
+### Changed
+- **README.md**: Setup steps updated to reference `CHANGELOG-TEMPLATE.md` so new repos start with a populated changelog
+
+### Fixed
+- **GitLab mirror scope**: Workflow now mirrors only local branches and tags, not remote refs, preventing duplicate-ref push failures
+
+### Removed
+- **`sync.sh`**: Manual cross-repo sync script retired — superseded by the GitHub Action sync workflow
 
 ## [1.3.0] - 2026-04-07
 ### Changed
