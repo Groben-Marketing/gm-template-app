@@ -1,6 +1,6 @@
 # Decisions & Lessons Learned
 
-> This is the institutional memory of this project. Every time we burn hours on something and finally crack it, it goes here. Claude Code reads this at the start of every session so we never repeat the same mistakes.
+> This is the institutional memory of this project. Every time we burn hours on something and finally crack it, it goes here. Claude Code reads this when picking up work so we never repeat the same mistakes.
 
 ---
 

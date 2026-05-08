@@ -1,6 +1,6 @@
 # Migration Waves — n8n → Hono
 
-> Master reference for migration order, dependencies, and timeline. Each wave is one or more Claude Code sessions.
+> Master reference for migration order, dependencies, and timeline. Each wave spans one or more focused work blocks.
 > Replace all placeholder names (App-A, your-server-one, etc.) with your actual apps and server names.
 
 ---
@@ -138,9 +138,9 @@ Wave 6 ─── App-K (6a) + App-L (6b) + App-M (6c)
 
 ---
 
-## Session Guidance
+## Pacing Guidance
 
-- **One wave per focus period.** Don't try to do Wave 2 and Wave 3 in the same session.
+- **One wave per focus period.** Don't try to do Wave 2 and Wave 3 in the same focus period.
 - **One app at a time within a wave.** Finish 2a before starting 2b.
 - **48-hour bake between apps.** Monitor production before moving to the next app.
 - **Each app ships as v2.0.0.** This is a major version bump — use `dev/v2.0` branch, tag `v2.0.0` on merge.

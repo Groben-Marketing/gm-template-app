@@ -57,7 +57,7 @@ For full-stack dev, run `npm run dev` and `npm run dev:client` in separate termi
 
 ## Start with an AI agent
 
-### First session — configure the template for your app
+### First pass — configure the template for your app
 
 Paste this into your AI agent (Claude Code, Cursor, etc.) when starting a new project from this template:
 
@@ -85,9 +85,9 @@ Ask me for any information you need to fill in these files accurately. Do not
 invent schema, routes, or features — ask first.
 ```
 
-### Every session after that
+### Every time you pick up work after that
 
-Your agent reads `PROJECT_PROTOCOL.md` automatically (it's in `CLAUDE.md` at the top). The boot sequence tells it to read recent git log → open GitHub issues → `CLAUDE.md` → `docs/overview.md` → roadmap entry before touching anything. No prompt needed — the protocol handles it.
+Your agent reads `PROJECT_PROTOCOL.md` automatically (it's in `CLAUDE.md` at the top). The pickup sequence tells it to read the active issue → recent git log → open GitHub issues → `CLAUDE.md` → `docs/overview.md` → roadmap entry before touching anything. No prompt needed — the protocol handles it.
 
 If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://docs.cursor.com/context/rules-for-ai) so it's always in context.
 
@@ -95,7 +95,7 @@ If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://doc
 
 | File | Purpose | Syncs to apps? |
 |------|---------|----------------|
-| `PROJECT_PROTOCOL.md` | Claude Code session rules and phase gates | Yes |
+| `PROJECT_PROTOCOL.md` | Operating rules for Claude Code (pickup, phase gates, scope discipline) | Yes |
 | `docs/r7c-standards.md` | Index of R7C ecosystem standards inherited by this template + current divergences | Yes |
 | `CLAUDE.md` | App-specific context — fill in per project | No |
 | `README-TEMPLATE.md` | README starter for app repos | No |
@@ -117,7 +117,7 @@ If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://doc
 ```
 Human + AI (any)  →  write feature spec (roadmap entry)
         ↓
-  Claude Haiku    →  implement entire feature in one session
+  Claude Haiku    →  implement entire feature in one pass
         ↓
  Claude Sonnet    →  review, patch, iterate with human (max 5 passes)
         ↓

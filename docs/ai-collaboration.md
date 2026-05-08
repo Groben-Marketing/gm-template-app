@@ -1,6 +1,6 @@
 # AI Collaboration Framework
 
-> Read this at session start. Governs how multiple AI models collaborate on this project without human handoff notes.
+> Read this when picking up work. Governs how multiple AI models collaborate on this project without human handoff notes.
 
 ---
 
@@ -17,7 +17,7 @@
 
 ---
 
-## Session Boot — Any Model
+## Picking Up Work — Any Model
 
 Run these in order before touching any code:
 
@@ -27,18 +27,19 @@ git pull origin $(git branch --show-current)
 
 Then read in this order:
 
-1. `git log --oneline -10` — recent history. The most recent commit message is your briefing.
-2. `git diff HEAD~1` — the last committed change in detail.
-3. `gh issue list --state open --limit 10` — what's in flight, what's blocked. The roadmap entry for the current feature is also linked from issues when escalation is open.
-4. `docs/roadmap.md` — current feature's `**Status**` and `**Pass Count**` fields tell you the pipeline stage and how many Sonnet passes have run.
-5. `CLAUDE.md` — app context (if not already read this session).
-6. `docs/overview.md` — what this app is (if not already read this session).
+1. **The issue you're picking up** — its body is your scope. If you don't have an issue, you don't have scope.
+2. `git log --oneline -10` — recent history. The most recent commit message is your briefing.
+3. `git diff HEAD~1` — the last committed change in detail.
+4. `gh issue list --state open --limit 10` — what else is in flight, what's blocked. The roadmap entry for the current feature is also linked from issues when escalation is open.
+5. `docs/roadmap.md` — current feature's `**Status**` and `**Pass Count**` fields tell you the pipeline stage and how many Sonnet passes have run.
+6. `CLAUDE.md` — app context (if not already read).
+7. `docs/overview.md` — what this app is (if not already read).
 
-**Do not start work until you understand what the previous model shipped and what the roadmap says is next.**
+**Do not start work until you understand what the previous model shipped and what the issue + roadmap say is next.**
 
 ---
 
-## Session End — Any Model
+## Wrapping Up — Any Model
 
 Before you stop or pass to the next model:
 
@@ -60,7 +61,7 @@ Think of this as a human dev team. Haiku is the junior developer who implements 
 ```
 Human (+ AI tool of choice) → write full feature spec (roadmap, 15 features planned ahead)
   ↓
-Haiku → implements the ENTIRE feature in one session (all tasks, all files)
+Haiku → implements the ENTIRE feature in one pass (all tasks, all files)
   ↓
 Haiku → commits with a clear message, pushes, updates roadmap entry status
   ↓
@@ -80,7 +81,7 @@ Done → Haiku picks up next feature
 | Simple feature you can spec yourself | Human alone (fastest) |
 | Unclear requirements that need exploration | Human + Sonnet in Cursor (iterative) |
 
-**Haiku implements the whole feature.** The tasks listed under a feature are Haiku's internal checklist — not separate sessions. Haiku does not hand off mid-feature unless it's genuinely stuck and cannot proceed without a decision.
+**Haiku implements the whole feature.** The tasks listed under a feature are Haiku's internal checklist — not separate handoffs. Haiku does not hand off mid-feature unless it's genuinely stuck and cannot proceed without a decision.
 
 **Sonnet does not re-implement.** Sonnet reviews, patches, and refines. If Sonnet finds itself rewriting large chunks from scratch, the feature spec was underspecified — flag it and fix the spec.
 
@@ -125,7 +126,7 @@ Every roadmap feature gets a `**Lead**` tag. This tells which model owns the imp
 | `[Sonnet]` | Claude Sonnet | Existing file edits, multi-file integrations, wiring, code review, complex debugging |
 | `[Opus]` | Claude Opus | Architectural decisions, cross-system design, when Sonnet is stuck |
 | `[Me]` | Operator | Business decisions, design approvals, real-world testing, manual triggers |
-| `[Together]` | Me + Sonnet | Diagnosis sessions, debugging requiring live system state + code changes together |
+| `[Together]` | Me + Sonnet | Diagnosis work, debugging requiring live system state + code changes together |
 
 The Lead tag goes on every `vX.Y.0` entry in `docs/roadmap.md`. Bug fixes (`vX.Y.Z`, Z > 0) default to `[Sonnet]` unless noted otherwise.
 
@@ -150,7 +151,7 @@ A Haiku task that requires judgment is a poorly written spec, not a Haiku limita
 
 ## Roadmap Task Format (Haiku-Optimized)
 
-Every `vX.Y.0` feature must be written so Haiku can implement the entire thing in one session without needing to ask questions. That's the spec quality bar.
+Every `vX.Y.0` feature must be written so Haiku can implement the entire thing in one pass without needing to ask questions. That's the spec quality bar.
 
 **Before writing a spec, read `docs/spec-writing-guide.md`.** It explains every field, shows good vs. bad examples using this stack, and has a pre-handoff checklist.
 
@@ -173,7 +174,7 @@ Everything Haiku needs. No ambiguity. No architecture decisions left open.
 - **Do NOT**: [anything Haiku might do wrong based on the pattern — guard rails]
 
 #### Haiku Checklist
-Internal checklist Haiku works through in one session. Not separate handoffs.
+Internal checklist Haiku works through in one pass. Not separate handoffs.
 
 - [ ] [Specific thing to build — file, function, or UI element]
 - [ ] [Specific thing to build]
@@ -210,24 +211,24 @@ If a pattern isn't in these docs, it hasn't been standardized. Escalate to Sonne
 
 ---
 
-## Cross-Session State
+## Shared State Between Models
 
-There is no per-repo handoff file. State lives in three places, each with a clear job:
+There is no per-repo handoff file. State that lets a fresh model pick up cold lives in three places, each with a clear job:
 
 | Source | What it carries | Updated by |
 |--------|-----------------|------------|
+| GitHub issue (the one you're working) | Scope. What's being asked, acceptance criteria, dispatch packet if any. | When work is filed, refined, or escalated |
 | `git log` | What shipped, what's left, what's blocked. The most recent commit message is the briefing for the next model. | Every commit |
-| GitHub issues | Open work, escalations, blockers with full context (problem, error, what was tried) | When work is filed, escalated, or resolved |
 | `docs/roadmap.md` entry | Pipeline stage (`**Status**`) and review iteration count (`**Pass Count**`) for the current feature | At each pipeline transition |
 
-A model that needs to pick up cold reads `git log -10`, `gh issue list --state open`, and the active roadmap entry — in that order — and has everything it needs.
+A model that needs to pick up cold reads the active issue, then `git log -10`, then `gh issue list --state open`, then the roadmap entry — in that order — and has everything it needs.
 
 ---
 
 ## Rules
 
-- Never start a session without reading the recent commits and open issues first.
-- Never end a session without a commit message that tells the next model what happened and what's next.
+- Never start work without reading the issue body, recent commits, and open issues first.
+- Never stop work without a commit message that tells the next model what happened and what's next.
 - Haiku does not make architecture decisions. If it needs to, stop and flag it.
 - Sonnet does not escalate before pass 3 without a specific reason.
 - Opus is not for normal work. If Opus is being used for routine tasks, something upstream broke down.

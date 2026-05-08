@@ -72,7 +72,7 @@ Key: set `VITE_BASE_PATH=/appname/` in `.env` so Vite generates correct asset UR
 
 | Doc                             | Purpose                                      | Syncs? |
 | ------------------------------- | -------------------------------------------- | ------ |
-| `PROJECT_PROTOCOL.md`           | Claude Code session rules                    | Yes    |
+| `PROJECT_PROTOCOL.md`           | Operating rules for Claude Code              | Yes    |
 | `docs/architecture-patterns.md` | Hono + SPA patterns, conventions             | Yes    |
 | `docs/branching.md`             | Git workflow                                 | Yes    |
 | `docs/versioning.md`            | Semantic versioning rules                    | Yes    |

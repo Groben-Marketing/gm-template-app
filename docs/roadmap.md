@@ -27,7 +27,7 @@ See `docs/ai-collaboration.md` for the Haiku → Sonnet → Human pipeline these
 **Pass Count**: 0
 
 #### Implementation Brief
-*Haiku implements the entire feature in one session. All decisions must be resolved here before Haiku starts.*
+*Haiku implements the entire feature in one pass. All decisions must be resolved here before Haiku starts.*
 
 - **Files**: `src/path/to/file.tsx`, `src/lib/api.ts`
 - **Pattern**: follow `src/components/Example.tsx` — [what specifically to copy]
@@ -36,7 +36,7 @@ See `docs/ai-collaboration.md` for the Haiku → Sonnet → Human pipeline these
 - **Do NOT**: [guard rails — common wrong turns based on the patterns]
 
 #### Haiku Checklist
-*Haiku works through this list in one session — these are not separate handoffs.*
+*Haiku works through this list in one pass — these are not separate handoffs.*
 
 - [ ] [Thing to build]
 - [ ] [Thing to build]

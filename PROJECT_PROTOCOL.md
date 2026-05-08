@@ -4,7 +4,9 @@
 
 ## Purpose
 
-This document governs every Claude Code session on this repo. Read it first. Follow it always.
+This document governs how every coding agent operates on this repo. Read it first. Follow it always.
+
+Work on this repo is anchored to **GitHub issues**. The current issue body (and any dispatch packet it references) is the agent's scope. Ecosystem-level coordination across R7C repos lives on a shared planning surface (issues + milestones + a GitHub Projects board on the org) — that's where work is triaged, picked up, and tracked. Don't pick up work that isn't tracked there.
 
 ---
 
@@ -27,26 +29,27 @@ The protocol below operationalizes (in particular):
 
 ---
 
-## Boot Sequence
+## Picking Up Work
 
-At the start of every session, read the following in this order:
+Before touching code, read the following in this order:
 
 1. `PROJECT_PROTOCOL.md` (this file)
-2. `git log --oneline -10` — recent history
-3. `git diff HEAD~1` — last committed change
-4. `gh issue list --state open --limit 10` — what's in flight, what's blocked, what was filed since the last session
-5. `CLAUDE.md` — app-specific context, schema, APIs, migration status
-6. `docs/overview.md` — what this app is and why it exists
-7. `docs/project-brief.md` — Phase Zero artifact. Confirms scope, boundaries, and isolation tests are locked. **If not approved, you are in Phase 0 — see Phase Gates below.**
-8. `docs/milestones.md` — current milestone in flight. Maps brief scope to roadmap entries.
-9. `docs/decisions.md` — lessons learned, problems solved, things that don't work
-10. `docs/roadmap.md` — current feature in progress (status field tells you the pipeline stage and pass count)
+2. **The issue you're picking up** — its body is your scope. If you don't have an issue, you don't have scope.
+3. `git log --oneline -10` — recent history
+4. `git diff HEAD~1` — last committed change
+5. `gh issue list --state open --limit 10` — what else is in flight, what's blocked, what's been filed recently
+6. `CLAUDE.md` — app-specific context, schema, APIs, migration status
+7. `docs/overview.md` — what this app is and why it exists
+8. `docs/project-brief.md` — Phase Zero artifact. Confirms scope, boundaries, and isolation tests are locked. **If not approved, you are in Phase 0 — see Phase Gates below.**
+9. `docs/milestones.md` — current milestone in flight. Maps brief scope to roadmap entries.
+10. `docs/decisions.md` — lessons learned, problems solved, things that don't work
+11. `docs/roadmap.md` — current feature in progress (status field tells you the pipeline stage and pass count)
 
-**For migration sessions**, also read:
-11. `docs/migration-checklist.md` — step-by-step process
-12. `docs/migration-waves.md` — wave order, dependencies, blockers
+**When migrating an app**, also read:
+12. `docs/migration-checklist.md` — step-by-step process
+13. `docs/migration-waves.md` — wave order, dependencies, blockers
 
-Cross-session state lives in `git log`, the issue tracker, and the roadmap entry's `**Status**` / `**Pass Count**` fields — there is no separate handoff file.
+State that lets a fresh agent pick up cold lives in `git log`, open GitHub issues, and the roadmap entry's `**Status**` / `**Pass Count**` fields — there is no separate handoff file.
 
 > Multiple models may be running concurrently in separate terminals on the same branch. See `docs/ai-collaboration.md` for the full pipeline.
 
@@ -147,9 +150,9 @@ If the answer to any of these is NO, refactor before building further.
 
 ---
 
-## Migration Sessions
+## Migration Work
 
-> These rules apply when the current session is migrating an app from n8n to Hono (v1.x → v2.0).
+> These rules apply when the current work is migrating an app from n8n to Hono (v1.x → v2.0).
 
 ### Before starting migration work
 
@@ -180,9 +183,9 @@ A migration to v2.0 is "new major scope" — Phase 0 (Brief) and Phase 0.5 (Mile
 
 ---
 
-## Session End
+## Wrapping Up
 
-Before ending any session:
+Before stopping work:
 
 1. Commit with a clear message that explains what shipped, what's left, and any blocker. Imagine the next model reading only `git log -5` — give it enough to pick up cold.
 2. Update the roadmap entry's `**Status**` and `**Pass Count**` fields if the feature changed pipeline stage.
@@ -199,14 +202,14 @@ The next model — whether Haiku, Sonnet, or Opus — will read `git log`, the o
 - If you're about to make a change that touches more than 3 files, pause and confirm.
 - When in doubt, ask. Don't guess.
 - Write decisions and lessons learned to `docs/decisions.md` when we solve a hard problem.
-- Never start a session without reading the recent commits and open issues first.
-- Never end a session without a commit message that tells the next model what happened and what's next.
+- Never start work without reading the issue body, recent commits, and open issues first.
+- Never stop work without a commit message that tells the next model what happened and what's next.
 
 ### Changelog Release Gate
 
 From `r7c-context/standards/agent-operating-standard.md`:
 
-- Every code change that will be merged or deployed must include a matching `CHANGELOG.md` update in the same branch / PR / session handoff.
+- Every code change that will be merged or deployed must include a matching `CHANGELOG.md` update in the same branch or PR.
 - Do not mark work as done, request a deploy, or confirm deploy readiness until the changelog entry exists — or the change is explicitly classified in the commit/PR as non-user-facing and no-changelog-needed.
 - Changelog entries describe shipped behavior, fixes, migrations, infrastructure changes, and user-visible workflow changes in plain language.
 - Never edit production changelog files directly. Production receives changelog updates only through the normal repo / build / deploy process.

@@ -57,12 +57,10 @@ A repo-local file may add context. It may not silently override an ecosystem sta
 
 When this template intentionally departs from `r7c-context/standards/`, the divergence is named here so it is auditable.
 
-### `AI_HANDOFF.md` retired
+### `AI_HANDOFF.md` retired (now upstream)
 
-- **What the standard says**: `repo-compliance-standard.md` lists `AI_HANDOFF.md` as a required file. `agent-operating-standard.md` references "Update handoff before ending any session".
-- **What this template does**: `AI_HANDOFF.md` is removed. Cross-session state lives in `git log`, GitHub issues, and the roadmap entry's `**Status**` / `**Pass Count**` fields.
-- **Why**: The handoff-file pattern was retired in `agent-gracie-law` after the file accumulated into a 350KB blob no agent read end-to-end. The git log is the source of truth for cross-session context.
-- **Action required upstream**: `r7c-context/standards/repo-compliance-standard.md` and `r7c-context/standards/agent-operating-standard.md` should be updated to reflect the retirement.
+- **History**: This template removed `AI_HANDOFF.md` after the handoff-file pattern was retired in `agent-gracie-law` — the file accumulated into a 350KB blob no agent read end-to-end. State that lets a fresh agent pick up cold lives in `git log`, the active GitHub issue, and the roadmap entry's `**Status**` / `**Pass Count**` fields.
+- **Upstream alignment**: `r7c-context/standards/repo-compliance-standard.md` and `audit-standard.md` no longer list `AI_HANDOFF.md` as a required file. `agent-operating-standard.md` no longer references "session handoff" as a destination for changelog entries. This is no longer a divergence — it's the standard.
 
 ---
 
@@ -76,4 +74,4 @@ A new agent landing in this repo cold should read:
 4. `r7c-context/standards/repo-compliance-standard.md` (what files this repo must contain)
 5. `CLAUDE.md` (this app's specific context)
 
-Reading the standards once gives durable context that doesn't need to be re-read every session — but the hierarchy must be honored on every change.
+Reading the standards once gives durable context that doesn't need to be re-read on every pickup — but the hierarchy must be honored on every change.

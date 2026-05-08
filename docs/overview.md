@@ -54,7 +54,7 @@
 
 ## Related Docs
 
-- `PROJECT_PROTOCOL.md` — Session rules and phase gates
+- `PROJECT_PROTOCOL.md` — Operating rules and phase gates
 - `CLAUDE.md` — App-specific context for Claude Code
 - `docs/decisions.md` — Lessons learned and key fixes
 - `docs/roadmap.md` — Milestones and feature tracking

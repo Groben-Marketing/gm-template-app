@@ -3,7 +3,7 @@
 > Updated 2026-04-07 — TypeScript + Preact+TSX+Vite+Tailwind + Hono API + Supabase/Postgres
 
 ```
-├── PROJECT_PROTOCOL.md          ← Session rules for Claude Code (read first, always)
+├── PROJECT_PROTOCOL.md          ← Operating rules for Claude Code (read first, always)
 ├── CLAUDE.md                    ← App-specific context for Claude Code (schema, APIs, conventions)
 ├── .env.example                 ← Template environment variables (copy to .env, fill in)
 ├── .gitignore                   ← node_modules, .env, dist/
@@ -264,7 +264,7 @@ Do NOT create separate `/admin/` URL paths. Use the auth middleware's `isAdmin` 
 
 | I need to... | Go to... |
 |--------------|----------|
-| Start a Claude Code session | `PROJECT_PROTOCOL.md` |
+| Pick up work in this repo | `PROJECT_PROTOCOL.md` |
 | Understand what this app does | `docs/overview.md` |
 | Understand the app-specific schema, APIs, conventions | `CLAUDE.md` |
 | Check if we've solved this problem before | `docs/decisions.md` |
