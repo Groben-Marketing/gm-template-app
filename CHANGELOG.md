@@ -4,6 +4,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 ### Added
+- **`src/components/TopNav.tsx`** — canonical application-shell navigation (closes [`#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16)). Extracted from `Wayfinder-Digital/r7c-app-atombomb` and generalized: `brand` (wordmark + homeHref + optional logo), `navItems` (with optional dropdown children), `portalHomeUrl` (optional — R7C ecosystem default is `https://r7c.app`), `view` / `profile` / `version` / `onBugReport` / `onSignOut` props. Purple-on-`#1a1625` palette intentionally locked across the fleet — visual consistency is part of the canonical-component value. Match-array active-state mechanism preserved verbatim from origin; `NavItem` + `NavLink` + `TopNavBrand` + `TopNavProps` exported for downstream type-safe consumption. Full API + `match[]` invariant documented in `README.md` → *Canonical components*. Typecheck green.
 - **GitLab mirror workflow**: `.github/workflows/mirror-to-gitlab.yml` — push-triggered Action that mirrors all branches and tags to `gitlab.com/wayfinder-digital/$REPO` using `GITLAB_MIRROR_TOKEN`
 - **`CHANGELOG-TEMPLATE.md`**: Starter changelog scaffold for new app repos created from this template
 - **`docs/project-brief.md`**: Phase Zero artifact template. Captures product, constraints, in/out-of-scope boundaries, architecture sketch, smallest useful version, boundary contracts, integration risks, and isolation test plan. Must be approved before any roadmap entries, issues, or code.

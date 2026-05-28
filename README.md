@@ -39,6 +39,62 @@ This template follows the `local-first-development` standard — all development
 
 For full-stack dev, run `npm run dev` and `npm run dev:client` in separate terminals. Vite proxies `/api/*` to the Hono server on `:3001`.
 
+## Canonical components
+
+The template ships a small set of UI primitives in `src/components/` that downstream apps consume directly to keep visual + behavioral consistency across the fleet. Override the data (nav items, brand, callbacks) via props; don't fork the styling.
+
+### `TopNav.tsx` — application-shell navigation
+
+Origin: `Wayfinder-Digital/r7c-app-atombomb` (`src/components/TopNav.tsx`). Generalized into the template per [`gm-template-app#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16).
+
+Renders the dark sticky header (purple-on-`#1a1625` canon palette), top-level + dropdown nav, user dropdown (profile chip, Portal Home, Changelog, Report a Bug, Sign Out), and the mobile slide-in menu. Adopting apps pass:
+
+- `brand: { wordmark, homeHref, logo? }` — text wordmark + home route + optional custom logo node (default is the sun-mark SVG)
+- `navItems: NavItem[]` — top-level items, with optional `children: NavLink[]` for grouped dropdowns
+- `view: string` — current route, compared against each item's `match[]` for highlight state
+- `profile`, `version`, `portalHomeUrl?`, `onBugReport`, `onSignOut`
+
+#### The `match[]` invariant
+
+Active-state across the desktop nav, dropdowns, and mobile menu is driven by per-link `match` string arrays compared against the current `view`. The mechanism's load-bearing invariant:
+
+> **`parent.match` MUST equal the union of all `parent.children[*].match`.**
+
+When you add or remove a route from a child link, update the parent's `match` array to match. The desktop dropdown trigger, the mobile group header, and the dropdown's child rows ALL read from this — keep them in sync and every surface lights up correctly with zero per-surface logic.
+
+Example:
+
+```tsx
+import { TopNav, type NavItem } from './components/TopNav';
+
+const NAV_ITEMS: NavItem[] = [
+    {
+        label: 'Accounts',
+        // Union of children's match arrays — keep in sync.
+        match: ['users', 'user', 'new-user', 'clients', 'client'],
+        children: [
+            { href: '#users',   label: 'Users',   desc: 'Manage user accounts', match: ['users', 'user', 'new-user'] },
+            { href: '#clients', label: 'Clients', desc: 'Client organizations', match: ['clients', 'client'] },
+        ],
+    },
+    // Items without children render as a single link in desktop + mobile:
+    { href: '#dashboard', label: 'Dashboard', match: ['dashboard'] },
+];
+
+<TopNav
+    brand={{ wordmark: 'My App', homeHref: '#dashboard' }}
+    navItems={NAV_ITEMS}
+    view={currentRoute}
+    profile={profile}
+    version="v0.1.0"
+    portalHomeUrl="https://r7c.app"
+    onBugReport={openBugReport}
+    onSignOut={signOut}
+/>
+```
+
+The purple-on-dark color palette is intentionally locked across the fleet — visual consistency is part of the value here. Override it only via a downstream fork of the file, not via props.
+
 ## How to use this
 
 1. **Clone or fork** this repo to start a new app
