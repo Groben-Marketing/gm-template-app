@@ -42,6 +42,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ### Fixed
 - **GitLab mirror scope**: Workflow now mirrors only local branches and tags, not remote refs, preventing duplicate-ref push failures
+- **README.md**: Local-dev note said Vite proxies to `:3001`; the actual default (`starter-server.ts`, `.env.example`, `vite.config.ts` proxy) is `:3000`. Demo Home view's example-detail link now uses `--shell-accent-strong` instead of hardcoded `text-blue-600`; token-contract wording in README/`index.css` clarified to "no brand colors" (dropdown panels keep fixed neutral white/gray surfaces).
 
 ### Removed
 - **`sync.sh`**: Manual cross-repo sync script retired — superseded by the GitHub Action sync workflow

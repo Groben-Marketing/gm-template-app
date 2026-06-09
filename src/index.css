@@ -5,10 +5,11 @@
    SHELL THEME TOKENS  —  THE ONE PLACE AN APP AUTHOR RE-BRANDS THE SHELL
    ════════════════════════════════════════════════════════════════════
    The application shell (TopNav, dropdowns, mobile drawer, active-state
-   highlights) is BRAND-AGNOSTIC. It reads every color + the body font
-   from the CSS variables below — it hardcodes NOTHING. To re-skin a new
-   app for its brand, change ONLY these values (and --app-font). Do not
-   edit the shell components.
+   highlights) is BRAND-AGNOSTIC. It reads every brand color + the body
+   font from the CSS variables below — it hardcodes no brand colors
+   (dropdown panels keep fixed neutral white/gray surfaces). To re-skin a
+   new app for its brand, change ONLY these values (and --app-font). Do
+   not edit the shell components.
 
    Defaults below are a neutral slate/indigo so a freshly-cloned app looks
    clean and intentional out of the box without claiming any brand.

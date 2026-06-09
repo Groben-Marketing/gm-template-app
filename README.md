@@ -37,7 +37,7 @@ This template follows the `local-first-development` standard — all development
 | `npm run smoke` | Health check + API route smoke tests |
 | `npm run typecheck` | `tsc --noEmit` — strict-mode type check across frontend + backend |
 
-For full-stack dev, run `npm run dev` and `npm run dev:client` in separate terminals. Vite proxies `/api/*` to the Hono server on `:3001`.
+For full-stack dev, run `npm run dev` and `npm run dev:client` in separate terminals. Vite proxies `/api/*` to the Hono server on `:3000`.
 
 ## Nav & Orientation Standard
 
@@ -61,7 +61,7 @@ Three places — nothing else:
 
 1. **`src/config/app.ts`** — set `APP_NAME`, `HOME_HREF`, `PORTAL_HOME_URL` (GM apps → `https://grocrm.app`, R7C apps → `https://r7c.app`, `undefined` to hide), `CHANGELOG_HREF` / `REFERENCE_HREF`. `BUILD_TAG` is automatic — Vite bakes in `package.json` version; CI can override via `VITE_BUILD_TAG`.
 2. **`NAV_ITEMS` in `src/index.tsx`** — replace the placeholder items with your app's real sections (≤5 top-level). Use `children` for grouped sub-pages and give each child a `desc` (the dropdown's "what can I do here" line). Set `badge` counts where pending work should be visible.
-3. **Shell theme tokens in `src/index.css`** — the `--shell-*` CSS variables under `:root`. The shell components hardcode **no** colors; re-brand by editing only these tokens (header bg/fg, accent, badge, danger) and `--app-font`. Don't fork the components.
+3. **Shell theme tokens in `src/index.css`** — the `--shell-*` CSS variables under `:root`. The shell components hardcode **no brand colors** — only fixed neutral surfaces (white dropdown panels, gray text/borders); re-brand by editing only these tokens (header bg/fg, accent, badge, danger) and `--app-font`. Don't fork the components.
 
 ### The `match[]` invariant
 

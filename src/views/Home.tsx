@@ -50,7 +50,7 @@ export function HomeView() {
                 <div className="p-5">
                     <p className="text-sm text-gray-500">
                         Replace this with a real data table.
-                        <a href="#detail/123" className="text-blue-600 hover:underline ml-1">View example detail &rarr;</a>
+                        <a href="#detail/123" className="text-[var(--shell-accent-strong)] hover:underline ml-1">View example detail &rarr;</a>
                     </p>
                 </div>
             </div>
