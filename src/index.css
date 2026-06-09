@@ -1,9 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* ════════════════════════════════════════════════════════════════════
+   SHELL THEME TOKENS  —  THE ONE PLACE AN APP AUTHOR RE-BRANDS THE SHELL
+   ════════════════════════════════════════════════════════════════════
+   The application shell (TopNav, dropdowns, mobile drawer, active-state
+   highlights) is BRAND-AGNOSTIC. It reads every brand color + the body
+   font from the CSS variables below — it hardcodes no brand colors
+   (dropdown panels keep fixed neutral white/gray surfaces). To re-skin a
+   new app for its brand, change ONLY these values (and --app-font). Do
+   not edit the shell components.
+
+   Defaults below are a neutral slate/indigo so a freshly-cloned app looks
+   clean and intentional out of the box without claiming any brand.
+
+     • GM apps  → point --shell-accent at the grocrm brand color
+     • R7C apps → point --shell-accent at the r7-red / r7-darkblue tokens
+
+   The shell consumes these via Tailwind v4 arbitrary values, e.g.
+   `bg-[var(--shell-header-bg)]`, `text-[var(--shell-accent)]`. That keeps
+   the markup token-driven instead of hardcoded utility classes.
+   ──────────────────────────────────────────────────────────────────── */
+@theme {
+    /* Body font for the whole app. */
+    --app-font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+:root {
+    /* ── Header / shell chrome ────────────────────────────────── */
+    --shell-header-bg:      #1e293b; /* sticky header + mobile drawer background (neutral slate-800) */
+    --shell-header-fg:      #ffffff; /* primary text on the header (logo, active nav) */
+    --shell-header-muted:   rgba(255, 255, 255, 0.62); /* idle nav links */
+    --shell-header-hover:   rgba(255, 255, 255, 0.06); /* hover background on header items */
+
+    /* ── Accent (the "you are here" / brand color) ───────────── */
+    --shell-accent:         #6366f1; /* indigo-500 — active underline + accent glyphs */
+    --shell-accent-fg:      #ffffff; /* text on a solid accent fill */
+    --shell-accent-soft:    rgba(99, 102, 241, 0.16);  /* active pill background on dark header */
+    --shell-accent-tint:    #eef2ff; /* active row background on light dropdowns (indigo-50) */
+    --shell-accent-strong:  #4338ca; /* active row text on light dropdowns (indigo-700) */
+    --shell-accent-mute:    #818cf8; /* avatar + muted accent glyphs (indigo-400) */
+
+    /* ── Count badge / "do now" signal ───────────────────────── */
+    --shell-badge-bg:       #6366f1; /* CountBadge fill — pending-work counts on nav items */
+    --shell-badge-fg:       #ffffff;
+    --shell-signal:         #f59e0b; /* DoNowDot pulse — "action required" amber */
+
+    /* ── Sign-out / destructive ──────────────────────────────── */
+    --shell-danger:         #dc2626; /* red-600 */
+    --shell-danger-tint:    #fef2f2; /* red-50 */
+}
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--app-font);
 }
 
 @keyframes fadeUp {

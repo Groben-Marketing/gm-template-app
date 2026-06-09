@@ -37,30 +37,39 @@ This template follows the `local-first-development` standard — all development
 | `npm run smoke` | Health check + API route smoke tests |
 | `npm run typecheck` | `tsc --noEmit` — strict-mode type check across frontend + backend |
 
-For full-stack dev, run `npm run dev` and `npm run dev:client` in separate terminals. Vite proxies `/api/*` to the Hono server on `:3001`.
+For full-stack dev, run `npm run dev` and `npm run dev:client` in separate terminals. Vite proxies `/api/*` to the Hono server on `:3000`.
 
-## Canonical components
+## Nav & Orientation Standard
 
-The template ships a small set of UI primitives in `src/components/` that downstream apps consume directly to keep visual + behavioral consistency across the fleet. Override the data (nav items, brand, callbacks) via props; don't fork the styling.
+Every app built from this template ships the **R7C Nav & Orientation Standard** out of the box. The shell in `src/components/` + `src/config/app.ts` + the theme tokens in `src/index.css` implement all nine points — your job as an app author is to fill in the config, not re-implement the shell.
 
-### `TopNav.tsx` — application-shell navigation
+The nine points:
 
-Origin: `Wayfinder-Digital/r7c-app-atombomb` (`src/components/TopNav.tsx`). Generalized into the template per [`gm-template-app#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16).
+1. **Persistent sticky branded header** on every authed view — logo + app name, logo links home.
+2. **Top-level nav (≤5 items) always visible** — dropdowns group sub-pages; **every routable view maps to a nav item** via its `match[]` (no orphan routes).
+3. **"You are here"** — the active section is highlighted with color + underline; nav reflects the current route on every surface (desktop, dropdown, mobile).
+4. **"What can I do here"** — every view opens with `PageHeading` (title + one-line description); empty states explain what will appear and how (`EmptyState`).
+5. **Actionable signal** — `CountBadge` surfaces pending-work counts on nav items; `DoNowDot` marks the one most-urgent section.
+6. **Account control** — avatar dropdown with name + role (from the Supabase profile), Sign Out, and the version/build tag.
+7. **Cross-app orientation** — Portal Home (URL from `src/config/app.ts`), Changelog, and Reference links in the account dropdown + mobile drawer.
+8. **Responsive** — desktop nav + mobile hamburger drawer, driven by the same `NAV_ITEMS` so they can't drift.
+9. **Back-affordance** — nested views (detail pages, drill-downs) render `Breadcrumb` at the top.
 
-Renders the dark sticky header (purple-on-`#1a1625` canon palette), top-level + dropdown nav, user dropdown (profile chip, Portal Home, Changelog, Report a Bug, Sign Out), and the mobile slide-in menu. Adopting apps pass:
+### How to make the shell *your* app
 
-- `brand: { wordmark, homeHref, logo? }` — text wordmark + home route + optional custom logo node (default is the sun-mark SVG)
-- `navItems: NavItem[]` — top-level items, with optional `children: NavLink[]` for grouped dropdowns
-- `view: string` — current route, compared against each item's `match[]` for highlight state
-- `profile`, `version`, `portalHomeUrl?`, `onBugReport`, `onSignOut`
+Three places — nothing else:
 
-#### The `match[]` invariant
+1. **`src/config/app.ts`** — set `APP_NAME`, `HOME_HREF`, `PORTAL_HOME_URL` (GM apps → `https://grocrm.app`, R7C apps → `https://r7c.app`, `undefined` to hide), `CHANGELOG_HREF` / `REFERENCE_HREF`. `BUILD_TAG` is automatic — Vite bakes in `package.json` version; CI can override via `VITE_BUILD_TAG`.
+2. **`NAV_ITEMS` in `src/index.tsx`** — replace the placeholder items with your app's real sections (≤5 top-level). Use `children` for grouped sub-pages and give each child a `desc` (the dropdown's "what can I do here" line). Set `badge` counts where pending work should be visible.
+3. **Shell theme tokens in `src/index.css`** — the `--shell-*` CSS variables under `:root`. The shell components hardcode **no brand colors** — only fixed neutral surfaces (white dropdown panels, gray text/borders); re-brand by editing only these tokens (header bg/fg, accent, badge, danger) and `--app-font`. Don't fork the components.
+
+### The `match[]` invariant
 
 Active-state across the desktop nav, dropdowns, and mobile menu is driven by per-link `match` string arrays compared against the current `view`. The mechanism's load-bearing invariant:
 
 > **`parent.match` MUST equal the union of all `parent.children[*].match`.**
 
-When you add or remove a route from a child link, update the parent's `match` array to match. The desktop dropdown trigger, the mobile group header, and the dropdown's child rows ALL read from this — keep them in sync and every surface lights up correctly with zero per-surface logic.
+When you add or remove a route from a child link, update the parent's `match` array to match. The desktop dropdown trigger, the mobile group header, and the dropdown's child rows ALL read from this — keep them in sync and every surface lights up correctly with zero per-surface logic. Nested views that have no nav entry of their own (e.g. `#detail/123`) go in their parent's `match` so the parent tab stays lit.
 
 Example:
 
@@ -72,8 +81,9 @@ const NAV_ITEMS: NavItem[] = [
         label: 'Accounts',
         // Union of children's match arrays — keep in sync.
         match: ['users', 'user', 'new-user', 'clients', 'client'],
+        badge: pendingUsers, // optional pending-work count
         children: [
-            { href: '#users',   label: 'Users',   desc: 'Manage user accounts', match: ['users', 'user', 'new-user'] },
+            { href: '#users',   label: 'Users',   desc: 'Manage user accounts', match: ['users', 'user', 'new-user'], badge: pendingUsers },
             { href: '#clients', label: 'Clients', desc: 'Client organizations', match: ['clients', 'client'] },
         ],
     },
@@ -82,18 +92,30 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 <TopNav
-    brand={{ wordmark: 'My App', homeHref: '#dashboard' }}
+    brand={{ wordmark: APP_NAME, homeHref: HOME_HREF }}
     navItems={NAV_ITEMS}
     view={currentRoute}
-    profile={profile}
-    version="v0.1.0"
-    portalHomeUrl="https://r7c.app"
+    profile={profile}            // { name, role } from your Supabase profiles row
+    version={BUILD_TAG}
+    portalHomeUrl={PORTAL_HOME_URL}
+    changelogHref={CHANGELOG_HREF}
+    referenceHref={REFERENCE_HREF}
     onBugReport={openBugReport}
     onSignOut={signOut}
 />
 ```
 
-The purple-on-dark color palette is intentionally locked across the fleet — visual consistency is part of the value here. Override it only via a downstream fork of the file, not via props.
+### Canonical components
+
+The shell + orientation primitives live in `src/components/`. Consume them directly; override data via props, never fork the styling — re-brand via the theme tokens instead.
+
+| Component | Standard point | Use |
+|-----------|----------------|-----|
+| `TopNav.tsx` | 1, 2, 3, 5, 6, 7, 8 | The whole header: brand, nav, dropdowns, account control, mobile drawer. Origin: `Wayfinder-Digital/r7c-app-atombomb`, generalized per [`#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16), tokenized for brand-agnosticism. |
+| `PageHeading.tsx` | 4, 9 | Top of EVERY routed view — title, description, optional `crumbs` + `actions`. |
+| `Breadcrumb.tsx` | 9 | Back-affordance on nested views; last item is the current page. |
+| `EmptyState.tsx` | 4 | Explanatory empty states — say what will appear here and how. |
+| `CountBadge.tsx` | 5 | `CountBadge` (numeric chip, hidden at 0) + `DoNowDot` (pulsing urgent marker). |
 
 ## How to use this
 

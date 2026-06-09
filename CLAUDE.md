@@ -102,6 +102,22 @@ Follow `docs/migration-checklist.md` for step-by-step process. Dev branch: `dev/
 
 ---
 
+## Nav & Orientation Standard (non-negotiable)
+
+This app ships the R7C Nav & Orientation Standard via the template shell. Full guide: `README.md` → *Nav & Orientation Standard*. The rules that bind every feature you add:
+
+1. Every authed view renders inside the shell — sticky `TopNav` header, logo links home.
+2. **No orphan routes**: every new route goes into some `NAV_ITEMS` entry's `match[]` (nested views ride on their parent's match). ≤5 top-level items; group sub-pages with dropdown `children`.
+3. Keep the `match[]` invariant: a parent's `match` = union of its children's `match` arrays.
+4. Every routed view opens with `PageHeading` (title + "what you do here" description). Empty states use `EmptyState` with a message that explains what will appear and how.
+5. Surface pending work with `badge` counts on nav items (`CountBadge`); mark the single most-urgent section with `doNow`.
+6. The account dropdown must keep: name + role from the Supabase profile, Sign Out, version tag (`BUILD_TAG`), Portal Home, Changelog, Reference.
+7. App identity (name, home route, portal URL, changelog/reference routes) lives ONLY in `src/config/app.ts`.
+8. Brand colors/fonts live ONLY in the `--shell-*` / `--app-font` tokens in `src/index.css`. Never hardcode brand colors in shell components; never fork them.
+9. Nested views (detail pages, wizards) render `Breadcrumb` at the top.
+
+---
+
 ## Defensive Defaults
 
 These apply to every feature unless explicitly overridden:

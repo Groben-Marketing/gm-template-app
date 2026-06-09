@@ -1,5 +1,9 @@
+// R7C Nav & Orientation Standard #4: empty states explain, they don't just
+// sit there. Always pass a `message` that says what WILL appear here and how
+// to make it appear — plus an action button when there's a next step.
 interface EmptyStateProps {
     title?: string;
+    /** What will show up here and how the user makes that happen. */
     message?: string;
     actionLabel?: string;
     onAction?: () => void;
@@ -13,7 +17,7 @@ export function EmptyState({ title, message, actionLabel, onAction }: EmptyState
             {actionLabel && (
                 <button
                     onClick={onAction}
-                    className="mt-4 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm"
+                    className="mt-4 px-4 py-2 text-sm font-semibold text-[var(--shell-accent-fg)] bg-[var(--shell-accent)] hover:opacity-90 rounded-lg transition-opacity shadow-sm"
                 >
                     {actionLabel}
                 </button>
