@@ -1,6 +1,6 @@
 {
   "name": "repo-template",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "type": "module",
   "description": "R7 Creative — Repo template for all app projects",

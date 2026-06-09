@@ -2,6 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { Badge } from '../components/Badge';
 import { InfoCard } from '../components/InfoCard';
 import { LoadingSkeleton } from '../components/LoadingSkeleton';
+import { PageHeading } from '../components/PageHeading';
 
 export function HomeView() {
     const [loading, setLoading] = useState(true);
@@ -29,10 +30,9 @@ export function HomeView() {
 
     return (
         <div className="max-w-5xl mx-auto p-6">
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-                <p className="text-sm text-gray-500 mt-1">Overview of your workspace</p>
-            </div>
+            {/* Standard #4: every view opens with PageHeading — title says where
+                you are, description says what you do here. */}
+            <PageHeading title="Dashboard" description="Overview of your workspace" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {stats.map((s, i) => (

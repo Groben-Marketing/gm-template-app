@@ -4,7 +4,21 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 ### Added
-- **`src/components/TopNav.tsx`** — canonical application-shell navigation (closes [`#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16)). Extracted from `Wayfinder-Digital/r7c-app-atombomb` and generalized: `brand` (wordmark + homeHref + optional logo), `navItems` (with optional dropdown children), `portalHomeUrl` (optional — R7C ecosystem default is `https://r7c.app`), `view` / `profile` / `version` / `onBugReport` / `onSignOut` props. Purple-on-`#1a1625` palette intentionally locked across the fleet — visual consistency is part of the canonical-component value. Match-array active-state mechanism preserved verbatim from origin; `NavItem` + `NavLink` + `TopNavBrand` + `TopNavProps` exported for downstream type-safe consumption. Full API + `match[]` invariant documented in `README.md` → *Canonical components*. Typecheck green.
+### Changed
+### Fixed
+### Removed
+
+## [1.4.0] - 2026-06-09
+### Added
+- **R7C Nav & Orientation Standard shell** — the template now embodies the full 9-point standard out of the box: sticky branded header, ≤5 top-level nav with dropdown grouping, color + underline active state, page headings + explanatory empty states, count badges, account control with version tag, Portal Home / Changelog / Reference cross-app links, mobile drawer, and breadcrumbs on nested views. Documented in `README.md` → *Nav & Orientation Standard*; enforced for agents via `CLAUDE.md` → *Nav & Orientation Standard (non-negotiable)*. Demo app (`src/index.tsx`) renders the shell with placeholder `NAV_ITEMS` + sample views using `PageHeading` / `EmptyState` / `Breadcrumb`.
+- **`src/config/app.ts`** — single config module for per-app identity: `APP_NAME`, `HOME_HREF`, `PORTAL_HOME_URL` (GM apps → `https://grocrm.app`, R7C apps → `https://r7c.app`, `undefined` to hide), `CHANGELOG_HREF`, `REFERENCE_HREF`, and `BUILD_TAG` (CI `VITE_BUILD_TAG` → baked `package.json` version → `dev`). The shell reads identity ONLY from here.
+- **Shell theme tokens** in `src/index.css` — `--shell-*` CSS variables (header bg/fg/muted/hover, accent family, badge, signal, danger) + `--app-font`. The shell components hardcode no brand colors; re-branding an app = editing these tokens only. Neutral slate/indigo defaults so a fresh clone claims no brand.
+- **`src/components/CountBadge.tsx`** — `CountBadge` (numeric pending-work chip, hidden at 0) + `DoNowDot` (pulsing "action required" marker), both token-driven.
+- **`src/components/Breadcrumb.tsx`** — back-affordance for nested views; last crumb is the current page with `aria-current="page"`.
+- **`src/components/PageHeading.tsx`** — standard view opener: title + "what you do here" description, optional `crumbs` + `actions` slots.
+- **Vite version injection** — `vite.config.ts` bakes `package.json` version into the bundle as `__APP_VERSION__` so the account dropdown shows a build tag with zero env-var setup.
+- **`src/components/TopNav.tsx`** — canonical application-shell navigation (closes [`#16`](https://github.com/Groben-Marketing/gm-template-app/issues/16)). Extracted from `Wayfinder-Digital/r7c-app-atombomb` and generalized: `brand` (wordmark + homeHref + optional logo), `navItems` (with optional dropdown children), `portalHomeUrl`, `view` / `profile` / `version` / `onBugReport` / `onSignOut` props. Match-array active-state mechanism preserved verbatim from origin; `NavItem` + `NavLink` + `TopNavBrand` + `TopNavProps` exported for downstream type-safe consumption. Full API + `match[]` invariant documented in `README.md`.
+
 - **GitLab mirror workflow**: `.github/workflows/mirror-to-gitlab.yml` — push-triggered Action that mirrors all branches and tags to `gitlab.com/wayfinder-digital/$REPO` using `GITLAB_MIRROR_TOKEN`
 - **`CHANGELOG-TEMPLATE.md`**: Starter changelog scaffold for new app repos created from this template
 - **`docs/project-brief.md`**: Phase Zero artifact template. Captures product, constraints, in/out-of-scope boundaries, architecture sketch, smallest useful version, boundary contracts, integration risks, and isolation test plan. Must be approved before any roadmap entries, issues, or code.
@@ -15,6 +29,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - **`.github/workflows/changelog-check.yml`**: CI gate that fails any PR which doesn't update `CHANGELOG.md` or apply the `no-changelog-needed` label. Also verifies `[Unreleased]` section exists and that `package.json` version does not regress.
 
 ### Changed
+- **`TopNav.tsx` is now brand-agnostic** — the originally-extracted purple-on-`#1a1625` palette was replaced by the `--shell-*` theme tokens before first release; re-skin via `src/index.css`, never by forking the component. New capabilities: active-section underline (color + underline "you are here"), per-item `badge` counts + `doNow` dot, `changelogHref` / `referenceHref` props, logo + wordmark as a single home link, flex-column mobile drawer (footer no longer overlaps the nav list).
+- **`EmptyState.tsx`**: action button now uses the shell accent tokens instead of hardcoded blue.
+- **`src/views/Home.tsx` + demo views**: open with `PageHeading` per the standard.
 - **README.md**: Setup steps updated to reference `CHANGELOG-TEMPLATE.md` so new repos start with a populated changelog
 - **`PROJECT_PROTOCOL.md`**: Phase Zero gate restored and strengthened. Added Phase 0 (Brief) with explicit prohibition on roadmap entries, GitHub issues, source code, and architecture decisions until `docs/project-brief.md` is approved. Added Phase 0.5 (Milestones) requiring approved milestone breakdown before any roadmap entry. Phase 2 (Issue) now requires brief revision when a feature introduces a new integration risk. Migration phase gates updated to require a branched brief (`docs/project-brief-v2.md`) for v2.0 work. Boot sequence updated to read brief and milestones. Brief gate applies to new repos and existing repos starting new major scope; not retroactive for established repos.
 - **`PROJECT_PROTOCOL.md`**: Added *Standards Inheritance* section near the top defining the rule hierarchy (`r7c-context/standards/` > `repo-template/` > repo-local) and naming the standards this protocol operationalizes. Added *Changelog Release Gate* under Rules, sourced verbatim from `agent-operating-standard.md` — every merged/deployed change must include a matching changelog entry; work cannot be marked done without one unless explicitly classified non-user-facing.
