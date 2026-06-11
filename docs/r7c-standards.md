@@ -32,6 +32,17 @@ A repo-local file may add context. It may not silently override an ecosystem sta
 
 ---
 
+## Template-Level Doctrine (propagated, not yet ecosystem law)
+
+These documents are doctrine authored at the template level and propagated to app repos via `.github/sync-config.json`, the same way `docs/architecture-patterns.md` flows. They are **not currently backed by a standard in `r7c-context/standards/`** — they sit at level 2 of the rule hierarchy (default repo implementation) and are candidates for promotion to ecosystem law.
+
+| Document | What it covers |
+|----------|----------------|
+| `docs/discovery-principles.md` | How to discover and spec an operations app: the product thesis (cognitive-load reduction), the objective/subjective split, the focus queue, 10 discovery principles, the discovery method, and anti-patterns |
+| `docs/cognitive-scoping-doctrine.md` | Role-based cognitive scoping as distinct from security/RLS, how to scope a role, the required admin "view-as" toggle, and acceptance checks |
+
+---
+
 ## Compliance — Required Files
 
 `repo-compliance-standard.md` requires the following files in every R7C repo. This template ships them all (modulo the divergence noted below):
@@ -73,5 +84,7 @@ A new agent landing in this repo cold should read:
 3. `r7c-context/standards/scope-governance-standard.md` (why Phase 0 exists)
 4. `r7c-context/standards/repo-compliance-standard.md` (what files this repo must contain)
 5. `CLAUDE.md` (this app's specific context)
+
+When the work is speccing a new operations app or designing role views, also read `docs/discovery-principles.md` and `docs/cognitive-scoping-doctrine.md` before writing the brief or the views.
 
 Reading the standards once gives durable context that doesn't need to be re-read on every pickup — but the hierarchy must be honored on every change.

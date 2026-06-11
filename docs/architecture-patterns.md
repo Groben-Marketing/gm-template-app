@@ -156,6 +156,14 @@ src/
 
 ---
 
+## Role Views & Cognitive Scoping
+
+Multi-role apps scope each role's UI to what that role needs to act — distinct from RLS/security, which governs what a role *may* access. Security is enforced server-side per the auth patterns above; cognitive scoping is composed in the view layer and is never a substitute for RLS.
+
+The full doctrine — scoping vs. security, how to scope a role, the required admin "view-as" toggle, acceptance checks — lives in `docs/cognitive-scoping-doctrine.md`. Discovery-stage guidance (role views, the focus queue, the objective/subjective split) lives in `docs/discovery-principles.md`.
+
+---
+
 ## Separation of Concerns
 
 Every component, module, or route must answer YES to:

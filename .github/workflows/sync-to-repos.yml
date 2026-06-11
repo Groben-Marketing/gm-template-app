@@ -5,7 +5,10 @@ on:
     branches: [main]
     paths:
       - 'PROJECT_PROTOCOL.md'
+      - 'docs/r7c-standards.md'
       - 'docs/architecture-patterns.md'
+      - 'docs/discovery-principles.md'
+      - 'docs/cognitive-scoping-doctrine.md'
       - 'docs/branching.md'
       - 'docs/versioning.md'
       - 'docs/secrets.md'

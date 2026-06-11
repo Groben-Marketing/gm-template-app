@@ -20,6 +20,8 @@
 │   ├── branching.md             ← How to work on branches and keep main safe
 │   ├── versioning.md            ← How to number releases (MAJOR.MINOR.PATCH)
 │   ├── secrets.md               ← Secret management, rotation procedures
+│   ├── discovery-principles.md  ← How to discover & spec an operations app (product thesis, 10 principles, anti-patterns)
+│   ├── cognitive-scoping-doctrine.md ← Role-based cognitive scoping: each role sees only their slice; admin view-as
 │   ├── migration-checklist.md   ← Per-app migration steps
 │   ├── migration-waves.md       ← Wave order, dependencies, blockers
 │   └── handoffs/
@@ -258,6 +260,8 @@ your-domain.com/appname/ → Supabase auth checks role
 
 Do NOT create separate `/admin/` URL paths. Use the auth middleware's `isAdmin` flag to conditionally render views and restrict API routes.
 
+Auth decides what a role *may* see; what each role's view actually *shows* is a separate design question — see `docs/cognitive-scoping-doctrine.md` (each role sees only their slice, plus the required admin "view-as" toggle).
+
 ---
 
 ## Quick Reference
@@ -269,6 +273,8 @@ Do NOT create separate `/admin/` URL paths. Use the auth middleware's `isAdmin` 
 | Understand the app-specific schema, APIs, conventions | `CLAUDE.md` |
 | Check if we've solved this problem before | `docs/decisions.md` |
 | See what's planned or track progress | `docs/roadmap.md` |
+| Spec a new operations app (discovery → brief) | `docs/discovery-principles.md` |
+| Reduce a role's view to what it needs to see | `docs/cognitive-scoping-doctrine.md` |
 | Remember how to use branches | `docs/branching.md` |
 | Know which version number to bump | `docs/versioning.md` |
 | Add a new API route | `server/routes/` |
