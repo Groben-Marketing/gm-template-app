@@ -5,11 +5,30 @@
     "docs/architecture-patterns.md",
     "docs/branching.md",
     "docs/versioning.md",
-    "docs/secrets.md"
+    "docs/secrets.md",
+    "docs/agent-verification.md",
+    "docs/ai-collaboration.md",
+    "docs/spec-writing-guide.md",
+    ".claude/commands/qa.md",
+    ".claude/commands/work-issue.md",
+    "scripts/verify.sh"
   ],
   "repos": [
-    "your-org/app-one",
-    "your-org/app-two",
-    "your-org/app-three"
+    "Wayfinder-Digital/r7c-app-atombomb",
+    "Wayfinder-Digital/r7c-app-switchboard",
+    "Wayfinder-Digital/r7c-app-gbpomatic",
+    "Wayfinder-Digital/r7c-app-relay",
+    "Wayfinder-Digital/r7c-app-workbench",
+    "Wayfinder-Digital/r7c-app-sturges",
+    "Wayfinder-Digital/r7c-app-copydesk",
+    "Wayfinder-Digital/r7c-app-copyfit",
+    "Wayfinder-Digital/r7c-app-fixboy",
+    "Wayfinder-Digital/yg-app-loopback",
+    "Wayfinder-Digital/nixie-app-intake",
+    "Wayfinder-Digital/nixie-app-vision",
+    "Wayfinder-Digital/nixie-app-holotape",
+    "Wayfinder-Digital/nixie-app-engine",
+    "Wayfinder-Digital/limelight-app-newsreel",
+    "Groben-Marketing/gm-app-prospect-factory"
   ]
 }

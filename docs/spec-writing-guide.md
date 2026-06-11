@@ -163,6 +163,17 @@ The good spec takes 5 more minutes to write. It saves 30 minutes of Sonnet revie
 
 ---
 
+## Writing the Verify Sections
+
+Every roadmap entry ends with two verify sections (see `docs/roadmap.md` for the format). The split matters — get an item in the wrong section and either an agent guesses at taste or a human burns time finding mechanical defects:
+
+- **Agent Verify (binary, automated)** — the standard `/qa` checks from `docs/agent-verification.md` plus feature-specific assertions. Every item must be mechanically checkable by an agent in a browser or terminal: "POST `/api/items` without `name` → 400 with error body", "archived item disappears from list without reload". If an agent can detect it, it goes here.
+- **Human Verify (judgment only)** — copy quality, design taste, business-logic correctness: "the empty-state copy reads like us", "the archive flow matches how the operator actually thinks about retiring an item". If reasonable people could disagree, it goes here.
+
+The litmus test: *could `/qa` fail this item?* If yes → Agent Verify. If the answer requires an opinion → Human Verify. "Works in browser or doesn't" is the agents' job now, not the human's.
+
+---
+
 ## The Pre-Handoff Checklist
 
 Run this before marking a spec ready for Haiku:
@@ -175,6 +186,7 @@ Run this before marking a spec ready for Haiku:
 - [ ] Shared components are named (`Toast`, `EmptyState`, `Badge`, `ConfirmDialog`, `LoadingSkeleton`)
 - [ ] "Do NOT" covers the most likely wrong turns for this specific feature
 - [ ] The Haiku Checklist items are concrete things to build, not goals ("add PATCH handler to `server/routes/items.ts`" not "implement archiving")
+- [ ] Agent Verify lists only mechanically checkable assertions; Human Verify lists only judgment calls (see *Writing the Verify Sections*)
 - [ ] Read it out loud: does any sentence have two valid interpretations?
 
 ---
