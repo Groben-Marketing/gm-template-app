@@ -14,8 +14,21 @@
     "scripts/verify.sh"
   ],
   "repos": [
-    "your-org/app-one",
-    "your-org/app-two",
-    "your-org/app-three"
+    "Wayfinder-Digital/r7c-app-atombomb",
+    "Wayfinder-Digital/r7c-app-switchboard",
+    "Wayfinder-Digital/r7c-app-gbpomatic",
+    "Wayfinder-Digital/r7c-app-relay",
+    "Wayfinder-Digital/r7c-app-workbench",
+    "Wayfinder-Digital/r7c-app-sturges",
+    "Wayfinder-Digital/r7c-app-copydesk",
+    "Wayfinder-Digital/r7c-app-copyfit",
+    "Wayfinder-Digital/r7c-app-fixboy",
+    "Wayfinder-Digital/yg-app-loopback",
+    "Wayfinder-Digital/nixie-app-intake",
+    "Wayfinder-Digital/nixie-app-vision",
+    "Wayfinder-Digital/nixie-app-holotape",
+    "Wayfinder-Digital/nixie-app-engine",
+    "Wayfinder-Digital/limelight-app-newsreel",
+    "Groben-Marketing/gm-app-prospect-factory"
   ]
 }
