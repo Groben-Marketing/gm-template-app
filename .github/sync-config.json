@@ -5,7 +5,13 @@
     "docs/architecture-patterns.md",
     "docs/branching.md",
     "docs/versioning.md",
-    "docs/secrets.md"
+    "docs/secrets.md",
+    "docs/agent-verification.md",
+    "docs/ai-collaboration.md",
+    "docs/spec-writing-guide.md",
+    ".claude/commands/qa.md",
+    ".claude/commands/work-issue.md",
+    "scripts/verify.sh"
   ],
   "repos": [
     "your-org/app-one",

@@ -122,6 +122,7 @@ This app ships the R7C Nav & Orientation Standard via the template shell. Full g
 
 These apply to every feature unless explicitly overridden:
 
+- **Verification**: agents self-verify per `docs/agent-verification.md` before presenting work.
 - **Error handling**: Never show a blank screen or raw error. Every failed fetch, timeout, and edge case gets a user-facing message. Use Toast for transient errors, EmptyState for "no data" states, and a fallback UI for unexpected crashes.
 - **Data protection**: Row-level security on every table. Service-role credentials stay in the Hono server (`.env`) — never in the SPA. Never log emails, tokens, or payment info. See `docs/secrets.md` for rotation procedures.
 - **Scale expectation**: [State it — e.g., "10-50 internal users" or "500+ public signups".]

@@ -20,6 +20,16 @@
 
 ## Log
 
+### Agents verify their own work before humans see it
+**Date**: 2026-06-11
+**Problem**: The pipeline ended with "Human → verify in browser," which made the human the first person to ever load the app after a change. Humans were burning verification time on mechanical defects — console errors, broken layouts at mobile widths, failed requests, unreadable contrast — that an agent could have caught and fixed before handoff.
+**What didn't work**: Treating typecheck/build as "verified." Code that compiles is not code that works — the gap between green builds and a working browser session was exactly where the human-found defects lived.
+**What fixed it**: `docs/agent-verification.md` (the standard: no `[human-verify]` status until the agent has browser-verified its own work — views walked happy + unhappy, zero console errors/failed requests, 375px/1440px render + 4.5:1 contrast, typecheck/build/smoke green, findings fixed and re-verified), `/qa` (`.claude/commands/qa.md`) to execute it, `scripts/verify.sh` as a Stop hook so a session can't end with failing mechanical checks, and the roadmap's verify section split into *Agent Verify (binary, automated)* vs *Human Verify (judgment only)*.
+**Why**: Human attention is the scarcest resource in the pipeline. Spending it on defects a machine can detect is waste; reserving it for judgment (copy quality, design taste, business-logic correctness) is the point of having the pipeline at all.
+**Rule going forward**: An agent never presents work it hasn't watched working in a browser — mechanical defects are the agent's to find and fix; humans verify judgment only.
+
+---
+
 ### Standardized on Preact+JSX+Vite+Tailwind + Hono API + Supabase/Postgres
 **Date**: 2026-03-25
 **Problem**: Needed a consistent, modern stack across all 12 apps on two servers. Apps had diverged — different frontend patterns, backend approaches, deployment methods.

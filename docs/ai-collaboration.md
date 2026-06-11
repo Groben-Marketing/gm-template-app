@@ -63,14 +63,20 @@ Human (+ AI tool of choice) → write full feature spec (roadmap, 15 features pl
   ↓
 Haiku → implements the ENTIRE feature in one pass (all tasks, all files)
   ↓
+Haiku → runs /qa per docs/agent-verification.md — fixes findings, re-verifies until clean
+  ↓
 Haiku → commits with a clear message, pushes, updates roadmap entry status
   ↓
 Sonnet → reviews full output, fixes what Haiku got wrong, iterates with human (max 5 passes)
   ↓
-Human → verifies in browser
+Sonnet → runs /qa — clean run required before Status moves to [human-verify]
+  ↓
+Human → verifies JUDGMENT items only (copy quality, design taste, business-logic correctness)
   ↓
 Done → Haiku picks up next feature
 ```
+
+**Agent verification is part of the pipeline, not optional.** `docs/agent-verification.md` is the standard; the `/qa` command executes it. No model sets a roadmap entry's `**Status**` to `[human-verify]` until it has verified its own work in a browser via a clean `/qa` run. Human Verify remains — but only for judgment calls. A mechanical defect (console error, failed request, broken layout, contrast failure, failing build) that reaches the human means the agent pipeline failed.
 
 **Choosing a spec-writing tool:**
 
@@ -94,6 +100,8 @@ Done → Haiku picks up next feature
 | 5 | If still unresolved → escalate to Opus, file an issue with the exact blocker |
 
 Pass count is tracked in the roadmap entry's `**Pass Count**` field. Increment it on each commit during the Sonnet review phase.
+
+Sonnet's review passes check the roadmap entry's **Agent Verify** assertions, not just the code. Before handing to the human — whichever pass that is — Sonnet runs `/qa` and gets a clean result; only then does `**Status**` move to `[human-verify]` (per `docs/agent-verification.md`). Mechanical defects found by `/qa` are Sonnet's to fix within the same pass budget, never the human's to discover.
 
 ### Escalation
 
@@ -187,11 +195,21 @@ What Sonnet checks after Haiku hands off. Sonnet fixes, does not rewrite.
 - [ ] [Edge case or error path]
 - [ ] Error handling: [what should happen when X fails]
 
-#### Human Verify
-Binary pass/fail. Works in browser or doesn't.
+#### Agent Verify (binary, automated)
+Populated from `docs/agent-verification.md` checks plus feature-specific assertions.
+Implementing and reviewing agents each run /qa against this list — all items must
+pass before Status moves to [human-verify].
 
-- [ ] [Action] → [Expected result]
-- [ ] [Action] → [Expected result]
+- [ ] /qa clean: affected views walked (happy + unhappy), zero console errors,
+      zero failed requests, 375px/1440px render + contrast pass, typecheck + build + smoke green
+- [ ] [Feature-specific assertion — mechanically checkable, e.g. "POST /api/items without name → 400 with error body"]
+- [ ] [Feature-specific assertion]
+
+#### Human Verify (judgment only)
+Copy quality, design taste, business-logic correctness — never mechanical defects
+an agent can detect.
+
+- [ ] [Judgment call] → [what good looks like]
 ```
 
 ---
@@ -229,6 +247,7 @@ A model that needs to pick up cold reads the active issue, then `git log -10`, t
 
 - Never start work without reading the issue body, recent commits, and open issues first.
 - Never stop work without a commit message that tells the next model what happened and what's next.
+- No model sets `**Status**` to `[human-verify]` without a clean `/qa` run — see `docs/agent-verification.md`.
 - Haiku does not make architecture decisions. If it needs to, stop and flag it.
 - Sonnet does not escalate before pass 3 without a specific reason.
 - Opus is not for normal work. If Opus is being used for routine tasks, something upstream broke down.

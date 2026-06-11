@@ -5,10 +5,17 @@ on:
     branches: [main]
     paths:
       - 'PROJECT_PROTOCOL.md'
+      - 'docs/r7c-standards.md'
       - 'docs/architecture-patterns.md'
       - 'docs/branching.md'
       - 'docs/versioning.md'
       - 'docs/secrets.md'
+      - 'docs/agent-verification.md'
+      - 'docs/ai-collaboration.md'
+      - 'docs/spec-writing-guide.md'
+      - '.claude/commands/qa.md'
+      - '.claude/commands/work-issue.md'
+      - 'scripts/verify.sh'
       - '.github/sync-config.json'
 
   workflow_dispatch:

@@ -49,9 +49,17 @@ See `docs/ai-collaboration.md` for the Haiku → Sonnet → Human pipeline these
 - [ ] [Edge case to test]
 - [ ] Error handling: [what happens when X fails]
 
-#### Human Verify
-- [ ] [Action in browser] → [expected result]
-- [ ] [Action in browser] → [expected result]
+#### Agent Verify (binary, automated)
+*Populated from `docs/agent-verification.md` checks plus feature-specific assertions. Implementing and reviewing agents each run `/qa` against this list — all items must pass before `**Status**` moves to `[human-verify]`.*
+
+- [ ] `/qa` clean: affected views walked (happy + unhappy paths), zero console errors, zero failed requests, 375px/1440px render + contrast pass, `typecheck` + `build` + `smoke` green
+- [ ] [Feature-specific assertion — mechanically checkable, e.g. "POST /api/items without name → 400 with error body"]
+- [ ] [Feature-specific assertion]
+
+#### Human Verify (judgment only)
+*Copy quality, design taste, business-logic correctness — never mechanical defects an agent can detect.*
+
+- [ ] [Judgment call] → [what good looks like]
 
 ---
 
@@ -76,8 +84,12 @@ See `docs/ai-collaboration.md` for the Haiku → Sonnet → Human pipeline these
 #### Sonnet Review Checklist
 - [ ] [Check]
 
-#### Human Verify
-- [ ] [Action] → [result]
+#### Agent Verify (binary, automated)
+- [ ] `/qa` clean per `docs/agent-verification.md`
+- [ ] [Feature-specific assertion]
+
+#### Human Verify (judgment only)
+- [ ] [Judgment call] → [what good looks like]
 
 ---
 

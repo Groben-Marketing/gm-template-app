@@ -132,6 +132,12 @@ The shell + orientation primitives live in `src/components/`. Consume them direc
      --description "Bypasses CHANGELOG.md update check; non-user-facing PR" \
      --color CCCCCC
    ```
+9. **Create the `needs-spec` label** — issues missing Implementation Brief details get this label instead of agents guessing (see `.github/ISSUE_TEMPLATE/feature.md`):
+   ```
+   gh label create needs-spec \
+     --description "Issue lacks Implementation Brief details; not ready for an agent" \
+     --color D93F0B
+   ```
 
 ## Start with an AI agent
 
@@ -179,14 +185,20 @@ If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://doc
 | `README-TEMPLATE.md` | README starter for app repos | No |
 | `CHANGELOG-TEMPLATE.md` | Changelog starter for app repos | No |
 | `docs/overview.md` | App architecture and stack decisions | No |
-| `docs/ai-collaboration.md` | Multi-model AI pipeline (Haiku → Sonnet → Opus) | No |
+| `docs/ai-collaboration.md` | Multi-model AI pipeline (Haiku → Sonnet → Opus) | Yes |
+| `docs/agent-verification.md` | Agent self-verification standard — browser-verify before `[human-verify]` | Yes |
 | `docs/architecture-patterns.md` | Hono + SPA coding patterns | Yes |
 | `docs/branching.md` | Git workflow | Yes |
 | `docs/versioning.md` | Semantic versioning rules + changelog format | Yes |
 | `docs/roadmap.md` | Feature tracking template | No |
-| `docs/spec-writing-guide.md` | How to write Haiku-ready feature specs | No |
+| `docs/spec-writing-guide.md` | How to write Haiku-ready feature specs | Yes |
 | `docs/secrets.md` | Secret management and rotation procedures | Yes |
 | `docs/migration-waves.md` | n8n → Hono migration planning template | No |
+| `.claude/commands/qa.md` | `/qa` — runs the agent-verification standard against the app | Yes |
+| `.claude/commands/work-issue.md` | `/work-issue <N>` — full issue-to-PR loop inside repo law | Yes |
+| `.claude/settings.json` | Registers `scripts/verify.sh` as a Stop hook | No — ships at clone, never synced (would clobber downstream settings) |
+| `scripts/verify.sh` | Mechanical gate: typecheck + build (+ smoke if server up) | Yes |
+| `.github/ISSUE_TEMPLATE/feature.md` | Feature issue template — roadmap spec format | No |
 | `.env.example` | Environment variable template | No |
 | `.github/sync-config.json` | Sync targets — update with your repos | No |
 
@@ -197,9 +209,13 @@ Human + AI (any)  →  write feature spec (roadmap entry)
         ↓
   Claude Haiku    →  implement entire feature in one pass
         ↓
+  Claude Haiku    →  /qa — self-verify in browser per docs/agent-verification.md
+        ↓
  Claude Sonnet    →  review, patch, iterate with human (max 5 passes)
         ↓
-      Human       →  verify in browser
+ Claude Sonnet    →  /qa — clean run required before human handoff
+        ↓
+      Human       →  verify judgment items only (copy, taste, business logic)
         ↓
       Done        →  Haiku picks up next feature
 ```
