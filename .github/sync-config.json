@@ -13,6 +13,9 @@
     ".claude/commands/work-issue.md",
     "scripts/verify.sh"
   ],
+  "remove": [
+    "AI_HANDOFF.md"
+  ],
   "repos": [
     "Wayfinder-Digital/r7c-app-atombomb",
     "Wayfinder-Digital/r7c-app-switchboard",

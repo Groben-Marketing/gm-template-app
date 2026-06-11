@@ -16,7 +16,7 @@ Opinionated full-stack app template for building internal tools and web apps wit
 
 **AI workflow** — a Haiku → Sonnet → Human review pipeline built around Claude Code, with structured handoff docs, roadmap templates, and spec-writing guidelines that let a smaller model implement entire features from a well-written spec.
 
-**Template sync** — a GitHub Action that propagates shared protocol files (`PROJECT_PROTOCOL.md`, `docs/branching.md`, etc.) to downstream repos via automated PRs.
+**Template sync** — a GitHub Action that propagates shared protocol files (`PROJECT_PROTOCOL.md`, `docs/branching.md`, etc.) to downstream repos via automated PRs. The config's `remove` list propagates deprecations the same way: retired files (e.g. `AI_HANDOFF.md`) are deleted from downstream repos instead of lingering in old clones.
 
 **Ecosystem standards** — this template implements the R7 Creative ecosystem development standards (`r7c-context/standards/`). See `docs/r7c-standards.md` for the standards index and rule hierarchy.
 

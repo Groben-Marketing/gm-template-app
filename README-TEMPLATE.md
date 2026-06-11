@@ -88,9 +88,9 @@ Key: set `VITE_BASE_PATH=/appname/` in `.env` so Vite generates correct asset UR
 
 ## Template Sync
 
-Files marked "Syncs" are automatically pushed to downstream repos via GitHub Action when updated here. The action opens a PR in each repo for review.
+Files marked "Syncs" are automatically pushed to downstream repos via GitHub Action when updated here. The action opens a PR in each repo for review. Files listed in the config's `remove` array are **deleted** downstream by the same PRs — that's how deprecated protocol files (e.g. `AI_HANDOFF.md`) actually die instead of lingering in old clones.
 
-**Config**: `.github/sync-config.json` — lists target repos and synced files.
+**Config**: `.github/sync-config.json` — lists target repos, synced files, and removed (deprecated) files.
 
 **Requires**: A GitHub PAT stored as `REPO_SYNC_TOKEN` secret with repo access to all target repos.
 
