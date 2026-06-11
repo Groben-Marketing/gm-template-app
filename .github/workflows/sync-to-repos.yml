@@ -37,6 +37,7 @@ jobs:
           COMMIT_MSG="Sync from repo-template ($(date +%Y-%m-%d))"
 
           FILES=$(jq -r '.files[]' .github/sync-config.json)
+          REMOVE=$(jq -r '.remove[]?' .github/sync-config.json)
           REPOS=$(jq -r '.repos[]' .github/sync-config.json)
 
           for REPO in $REPOS; do
@@ -60,6 +61,17 @@ jobs:
                   UPDATED_LIST="${UPDATED_LIST}- ${FILE}\n"
                   echo "  Updated: $FILE"
                 fi
+              fi
+            done
+
+            # Deprecated files: deleting from the template isn't enough — existing
+            # downstream copies survive forever unless the sync removes them too.
+            for FILE in $REMOVE; do
+              if [ -f "$CLONE_DIR/$FILE" ]; then
+                rm "$CLONE_DIR/$FILE"
+                CHANGED=true
+                UPDATED_LIST="${UPDATED_LIST}- removed ${FILE} (deprecated)\n"
+                echo "  Removed: $FILE"
               fi
             done
 

@@ -8,6 +8,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Fixed
 ### Removed
 
+## [1.6.0] - 2026-06-11
+### Added
+- **Sync `remove` list** (closes [`#22`](https://github.com/Groben-Marketing/gm-template-app/issues/22)) — `.github/sync-config.json` gains a `"remove"` array; `sync-to-repos.yml` deletes each listed path from downstream repos in the same sync PRs that update files. Deprecating a protocol file is now self-enforcing: retiring it from the template sweeps it out of every downstream repo on the next sync instead of leaving stale copies that agents keep using. First entry: `AI_HANDOFF.md` (retired 2026-04 per `docs/r7c-standards.md`, but a 2026-06-11 audit found 14 repos still carrying it — two with writes as recent as 2026-06-08).
+
 ## [1.5.0] - 2026-06-11
 ### Added
 - **`docs/agent-verification.md`** — the agent self-verification standard (closes [`#20`](https://github.com/Groben-Marketing/gm-template-app/issues/20)). Core rule: an agent may not set Status to `[human-verify]` until it has verified its own work in a browser. Required checks for UI/route changes: walk every affected view happy + unhappy paths, zero console errors / failed network requests, render check at 375px and 1440px (no overflow, no orphan words, no wrapped button labels, no computed text contrast under 4.5:1), `typecheck` + `build` + `smoke` green, and fix-and-re-verify before presenting. Backend-only variant: server-log check, mechanical gates, and direct exercise of every changed route. Human Verify remains in the pipeline — judgment calls only (copy quality, design taste, business-logic correctness), never mechanical defects. Synced downstream.
