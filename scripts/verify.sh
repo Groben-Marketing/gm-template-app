@@ -32,6 +32,12 @@ npm run typecheck || fail "typecheck failed — fix the type errors above before
 echo "== verify: build =="
 npm run build || fail "build failed — fix the build errors above before ending the session"
 
+# Port discovery: environment wins, then the repo's .env, then template default.
+# Without this, a different app squatting on :3000 makes the health probe a
+# false positive and smoke runs against the wrong server.
+if [ -z "${PORT:-}" ] && [ -f .env ]; then
+  PORT=$(grep -E '^PORT=' .env | tail -1 | cut -d= -f2 | tr -d '[:space:]\r')
+fi
 API_PORT="${PORT:-3000}"
 HEALTH_URL="${API_URL:-http://localhost:${API_PORT}}/health"
 if curl -sf --max-time 3 "$HEALTH_URL" >/dev/null 2>&1; then
