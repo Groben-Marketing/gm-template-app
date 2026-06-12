@@ -8,6 +8,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Fixed
 ### Removed
 
+## [1.6.1] - 2026-06-12
+### Fixed
+- **`scripts/verify.sh` port discovery** — the health probe now reads `PORT` from the repo's `.env` when the environment doesn't set it (env → `.env` → 3000 default). Without this, an unrelated app on `:3000` makes the probe a false positive and smoke runs against the wrong server — observed in the wild adopting the hook in `r7c-app-sturges` (API on `:3001`, foreign app answering `:3000`).
+
 ## [1.6.0] - 2026-06-11
 ### Added
 - **Sync `remove` list** (closes [`#22`](https://github.com/Groben-Marketing/gm-template-app/issues/22)) — `.github/sync-config.json` gains a `"remove"` array; `sync-to-repos.yml` deletes each listed path from downstream repos in the same sync PRs that update files. Deprecating a protocol file is now self-enforcing: retiring it from the template sweeps it out of every downstream repo on the next sync instead of leaving stale copies that agents keep using. First entry: `AI_HANDOFF.md` (retired 2026-04 per `docs/r7c-standards.md`, but a 2026-06-11 audit found 14 repos still carrying it — two with writes as recent as 2026-06-08).
