@@ -13,9 +13,14 @@ on:
       - 'docs/agent-verification.md'
       - 'docs/ai-collaboration.md'
       - 'docs/spec-writing-guide.md'
+      - 'docs/self-evident-ui.md'
+      - 'docs/efficiency-standard.md'
+      - 'docs/fault-isolation-standard.md'
+      - 'docs/compliance-scorecard.md'
       - '.claude/commands/qa.md'
       - '.claude/commands/work-issue.md'
       - 'scripts/verify.sh'
+      - 'scripts/compliance-scan.sh'
       - '.github/sync-config.json'
 
   workflow_dispatch:
@@ -33,22 +38,32 @@ jobs:
         shell: bash
         run: |
           set -e
-          BRANCH="sync/repo-template-$(date +%Y%m%d)"
+          # Unique per RUN, not per day — multiple pushes the same day no longer
+          # collide on one branch and silently skip ("branch exists").
+          BRANCH="sync/repo-template-$(date +%Y%m%d)-${GITHUB_RUN_ID}"
           COMMIT_MSG="Sync from repo-template ($(date +%Y-%m-%d))"
 
           FILES=$(jq -r '.files[]' .github/sync-config.json)
           REMOVE=$(jq -r '.remove[]?' .github/sync-config.json)
           REPOS=$(jq -r '.repos[]' .github/sync-config.json)
 
+          # Track outcomes so a totally-broken token can't pass as a green run.
+          CLONE_OK=0
+          CLONE_FAIL=0
+          REPO_COUNT=0
+
           for REPO in $REPOS; do
             echo "=== $REPO ==="
+            REPO_COUNT=$((REPO_COUNT+1))
             CLONE_DIR="/tmp/sync-$(echo $REPO | tr '/' '-')"
             rm -rf "$CLONE_DIR"
 
-            git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$CLONE_DIR" 2>/dev/null || {
+            if ! git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$CLONE_DIR" 2>/dev/null; then
               echo "  SKIP: clone failed"
+              CLONE_FAIL=$((CLONE_FAIL+1))
               continue
-            }
+            fi
+            CLONE_OK=$((CLONE_OK+1))
 
             CHANGED=false
             UPDATED_LIST=""
@@ -94,10 +109,19 @@ jobs:
             git commit -m "$COMMIT_MSG" || { cd /; rm -rf "$CLONE_DIR"; continue; }
             git push origin "$BRANCH" 2>/dev/null || { echo "  SKIP: push failed"; cd /; rm -rf "$CLONE_DIR"; continue; }
 
-            PR_BODY="Automated sync of shared files from [repo-template](https://github.com/your-username/repo-template)."
+            PR_BODY="Automated sync of shared files from [gm-app-template](https://github.com/Groben-Marketing/gm-app-template)."
             gh pr create --repo "$REPO" --base main --head "$BRANCH" --title "Sync from repo-template" --body "$PR_BODY" 2>/dev/null || echo "  PR exists or failed"
 
             cd /
             rm -rf "$CLONE_DIR"
             echo "  Done"
           done
+
+          echo "=== sync summary: ${CLONE_OK}/${REPO_COUNT} cloned, ${CLONE_FAIL} clone failures ==="
+          # Fail the job if EVERY clone failed — that's a broken REPO_SYNC_TOKEN,
+          # not a no-op. Previously this exited 0 and hid the breakage behind a
+          # green check while nothing propagated.
+          if [ "$CLONE_OK" -eq 0 ] && [ "$REPO_COUNT" -gt 0 ]; then
+            echo "FATAL: every clone failed — REPO_SYNC_TOKEN is almost certainly expired or lacks repo access." >&2
+            exit 1
+          fi
