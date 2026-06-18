@@ -4,6 +4,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## [1.7.0] - 2026-06-18
+### Added
 - **`docs/self-evident-ui.md`** — the Self-Evident UI Standard. Bakes one principle into the template core: an app's screens must mirror its core loop, or the app stops being self-evident and starts requiring human training. Enforceable rules, not prose: §1 a mandatory one-sentence core-loop definition; §2 the UI-to-loop alignment rule (every screen advances exactly one loop step), anchored to Norman's gulfs of execution/evaluation + Nielsen heuristic #2; §3 the named UI principles (self-evidence/Krug, IA/Rosenfeld-Morville, progressive disclosure, empty-states-as-teaching, contextual help, FRE, coachmarks, "one app or two?") each with a one-line definition and build-order rank; §4 the "self-evident before explained" hard build order (structure → contextual help → tour → docs) with a fidelity caveat that later tiers are complements, not disposable. Sits one layer above the Nav & Orientation Standard (which it cross-references, not duplicates). Synced downstream.
 - **Phase 0 hard gates** (`PROJECT_PROTOCOL.md` + `docs/project-brief.md`) — a brief now cannot be approved without (a) the core loop stated in exactly one sentence and (b) an owner-confirmed "one app or two?" test that flags multi-loop products for a possible split. New `Core loop` and `One app or two?` fields added to the project-brief template and to its approval gate.
 - **Phase 1.5: Wireframe** (`PROJECT_PROTOCOL.md`) — a new stage between Map (1) and Issue (2): when work adds or reworks screens, every screen is mapped to its core-loop step in lo-fi before any production UI, so UI-to-loop alignment is verified cheaply. Sign-off phrase "Wireframes are aligned." Backend/refactor-only work skips it.
@@ -12,8 +18,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Changed
 - **`README.md`, `docs/overview.md`, `CLAUDE.md`, `docs/spec-writing-guide.md`** — wired the new standard into the doc indexes and cross-references: README Files table + overview Related Docs list it; the CLAUDE.md Nav & Orientation Standard now points to it as the layer above ("how screens are wired" vs. "what the screens are and how they map to the loop"); the spec pre-handoff checklist gains an item requiring any screen-adding spec to name the core-loop step it advances. `.github/sync-config.json` adds `docs/self-evident-ui.md` to the synced `files`.
 - **Efficiency + fault-isolation wired into the gates** — `PROJECT_PROTOCOL.md` Phase 2 now requires naming each new piece's failure boundary and checking efficiency at scale (pagination/indexing/rate-limit), and the Separation of Concerns section spells out the runtime obligations of "fail by itself"; `CLAUDE.md` Defensive Defaults add Fault-isolation + Efficiency entries and point error-handling at the `ErrorBoundary` primitive; `docs/architecture-patterns.md` cross-references both standards from the SPA/route patterns; `docs/spec-writing-guide.md` adds fault-isolation + efficiency pre-handoff checklist items; the README canonical-components table lists `ErrorBoundary`. `.github/sync-config.json` adds both new standards to the synced `files`.
-### Fixed
-### Removed
 
 ## [1.6.1] - 2026-06-12
 ### Fixed
