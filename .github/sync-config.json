@@ -12,9 +12,11 @@
     "docs/self-evident-ui.md",
     "docs/efficiency-standard.md",
     "docs/fault-isolation-standard.md",
+    "docs/compliance-scorecard.md",
     ".claude/commands/qa.md",
     ".claude/commands/work-issue.md",
-    "scripts/verify.sh"
+    "scripts/verify.sh",
+    "scripts/compliance-scan.sh"
   ],
   "remove": [
     "AI_HANDOFF.md"

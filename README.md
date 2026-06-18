@@ -196,6 +196,8 @@ If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://doc
 | `docs/self-evident-ui.md` | UI-to-core-loop alignment standard — core-loop definition gate, screen-to-loop rule, named UI principles + build order | Yes |
 | `docs/efficiency-standard.md` | Efficiency doctrine — query/index/pagination/caching/rate-limit rules + the scale-expectation gate | Yes |
 | `docs/fault-isolation-standard.md` | Fault-isolation doctrine — "fail by itself" as runtime rules; error boundary, outbound timeouts/retry, bulkheaded jobs | Yes |
+| `docs/compliance-scorecard.md` | The rubric behind `scripts/compliance-scan.sh` — per-repo PASS/WARN/FAIL/REVIEW against the standards; makes "better apps" measurable | Yes |
+| `scripts/compliance-scan.sh` | Read-only scan emitting a repo's compliance scorecard (advisory, never blocks) | Yes |
 | `docs/secrets.md` | Secret management and rotation procedures | Yes |
 | `docs/migration-waves.md` | n8n → Hono migration planning template | No |
 | `.claude/commands/qa.md` | `/qa` — runs the agent-verification standard against the app | Yes |

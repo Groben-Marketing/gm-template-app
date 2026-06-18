@@ -59,5 +59,6 @@
 - `docs/self-evident-ui.md` — UI-to-core-loop alignment standard (core-loop gate, screen-to-loop rule, build order)
 - `docs/efficiency-standard.md` — Efficiency doctrine (query/index/pagination/caching/rate-limit rules + scale-expectation gate)
 - `docs/fault-isolation-standard.md` — Fault-isolation doctrine ("fail by itself" runtime rules + shipped primitives)
+- `docs/compliance-scorecard.md` — Per-repo scorecard rubric (`scripts/compliance-scan.sh`) that makes standards adoption measurable
 - `docs/decisions.md` — Lessons learned and key fixes
 - `docs/roadmap.md` — Milestones and feature tracking

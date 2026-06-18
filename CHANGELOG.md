@@ -4,6 +4,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 ### Added
+- **`scripts/compliance-scan.sh` + `docs/compliance-scorecard.md`** — the measurement layer behind the "process + audit" enforcement choice, so "are the apps getting better" is observable instead of asserted. A read-only bash scan emits a per-repo PASS/WARN/FAIL/REVIEW scorecard against the v1.7.0 standards (rules adoption, fault-isolation primitives present + wired, efficiency signals, brief core-loop filled). It is advisory — never blocks a build, edits code, or fails CI. Honesty rule: only high-confidence mechanical signals are auto-graded; judgment items (is the core loop honest? is that `select('*')` on a growing table?) are printed as `[REVIEW]` prompts rather than fake-graded. Feeds the Cheetah audit: baseline before Phase 2 adoption, confirm after, post the summary to the umbrella tracking issue. Both files synced downstream.
 ### Changed
 ### Fixed
 ### Removed
