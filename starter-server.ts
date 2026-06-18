@@ -26,6 +26,15 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 // Service-role client — for server-side operations that bypass RLS
 const sbAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
+// ─── Per-user authz cache (Auth-Performance Standard) ────
+// After local JWT verification, the only per-request DB work in authMiddleware is
+// the profile/role read. It changes rarely, so cache it per user for a short
+// window — bursty navigation then skips that round-trip. A change applies within
+// AUTHZ_TTL_MS; Postgres RLS remains the hard boundary on every data query.
+// See docs/auth-performance-standard.md.
+const AUTHZ_TTL_MS = 20_000;
+const authzCache = new Map<string, { profile: { id: string; role: string; name: string } | null; isAdmin: boolean; exp: number }>();
+
 // ─── External-Call Guard (Fault-Isolation Standard) ──────
 // Every outbound call to a third-party (Resend, Frame.io, Anthropic, …) MUST be
 // time-boxed so a hung dependency can't pin a request open or exhaust the event
@@ -92,24 +101,51 @@ async function authMiddleware(c: Context, next: Next) {
     // Create a client scoped to this user's JWT — respects RLS
     const sbUser = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         global: { headers: { Authorization: `Bearer ${token}` } },
+        // Server, request-scoped: never persist or auto-refresh a session.
+        auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const { data: { user }, error } = await sbUser.auth.getUser(token);
-    if (error || !user) {
+    // Verify the JWT LOCALLY. Supabase signs access tokens with asymmetric keys
+    // (ES256), so getClaims() verifies against a module-global cached JWKS — one
+    // fetch on cold start, then sub-millisecond per request. DO NOT use
+    // auth.getUser() here: it makes a network round-trip to the Supabase Auth
+    // server on EVERY request (a ~1–2s per-request latency floor). getClaims()
+    // still rejects expired/tampered tokens. See docs/auth-performance-standard.md.
+    const { data: claimsData, error } = await sbUser.auth.getClaims(token);
+    const claims = claimsData?.claims;
+    if (error || !claims?.sub) {
         return c.json({ error: 'Invalid or expired token' }, 401);
     }
+    const user = {
+        id: claims.sub,
+        email: claims.email ?? '',
+        app_metadata: claims.app_metadata ?? {},
+        user_metadata: claims.user_metadata ?? {},
+    } as unknown as { id: string; email: string };
 
-    // Fetch profile for role-based access
-    const { data: profile } = await sbAdmin
-        .from('profiles')
-        .select('id, role, name')
-        .eq('id', user.id)
-        .single();
+    // Profile/role for access control — cached per user (short TTL) so repeat
+    // requests skip this round-trip.
+    const now = Date.now();
+    let entry = authzCache.get(user.id);
+    if (!entry || entry.exp <= now) {
+        const { data: profile } = await sbAdmin
+            .from('profiles')
+            .select('id, role, name')
+            .eq('id', user.id)
+            .single();
+        entry = {
+            profile: (profile as { id: string; role: string; name: string } | null) ?? null,
+            isAdmin: profile?.role === 'owner' || profile?.role === 'admin',
+            exp: now + AUTHZ_TTL_MS,
+        };
+        if (authzCache.size > 1000) authzCache.clear();
+        authzCache.set(user.id, entry);
+    }
 
     c.set('user', user);
-    c.set('profile', profile);
+    c.set('profile', entry.profile);
     c.set('sbUser', sbUser); // RLS-scoped client for this request
-    c.set('isAdmin', profile?.role === 'owner' || profile?.role === 'admin');
+    c.set('isAdmin', entry.isAdmin);
     await next();
 }
 
