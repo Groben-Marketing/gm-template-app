@@ -135,7 +135,8 @@ If a screen can't be tied to a single loop step, either the screen is wrong or t
 ### Phase 2: Issue
 
 - Write out the specific changes to be made.
-- Identify what could break.
+- Identify what could break — and name the **failure boundary** for each new piece: which `ErrorBoundary` catches a view crash, the degraded mode for each outbound call, how a job failure stays isolated (`docs/fault-isolation-standard.md`).
+- Check **efficiency at scale**: any new list paginates, any new filtered/sorted/RLS column is indexed, any new external call stays under its provider's rate limit (`docs/efficiency-standard.md`). Apply against the brief's stated scale expectation.
 - If this feature introduces a new integration risk not in the brief's *Integration risks* table, the brief must be updated and re-approved before code starts.
 - If anything on the critical path depends on a third-party API, flag it. No uncontrolled third-party APIs on the critical ingestion path.
 
@@ -170,6 +171,8 @@ Every component, module, or feature must answer YES to all three:
 3. **Can it fail by itself?** (failure doesn't cascade)
 
 If the answer to any of these is NO, refactor before building further.
+
+The third question ("fail by itself") carries **runtime obligations**, not just a design check: views render inside an `ErrorBoundary`, backend calls are time-boxed (`src/lib/api.ts`), third-party calls go through `callExternal()`, and jobs are bulkheaded. The full rules and shipped primitives are in `docs/fault-isolation-standard.md`.
 
 ---
 

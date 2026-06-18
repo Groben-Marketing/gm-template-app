@@ -10,6 +10,8 @@
     "docs/ai-collaboration.md",
     "docs/spec-writing-guide.md",
     "docs/self-evident-ui.md",
+    "docs/efficiency-standard.md",
+    "docs/fault-isolation-standard.md",
     ".claude/commands/qa.md",
     ".claude/commands/work-issue.md",
     "scripts/verify.sh"
