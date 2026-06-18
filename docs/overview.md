@@ -56,5 +56,6 @@
 
 - `PROJECT_PROTOCOL.md` — Operating rules and phase gates
 - `CLAUDE.md` — App-specific context for Claude Code
+- `docs/self-evident-ui.md` — UI-to-core-loop alignment standard (core-loop gate, screen-to-loop rule, build order)
 - `docs/decisions.md` — Lessons learned and key fixes
 - `docs/roadmap.md` — Milestones and feature tracking

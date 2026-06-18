@@ -12,7 +12,7 @@
 - [ ] Reviewed by owner
 - [ ] **Approved** — date: `YYYY-MM-DD`, by: `[NAME]`
 
-The brief is approved when every field is filled, every "Open questions" item is resolved, and the owner has checked the **Approved** box with a date and their name. Until then, no roadmap entries, no issues, no code.
+The brief is approved when every field is filled, every "Open questions" item is resolved, **the *Core loop* field holds exactly one sentence, the *One app or two?* test is owner-confirmed**, and the owner has checked the **Approved** box with a date and their name. Until then, no roadmap entries, no issues, no code. (See `PROJECT_PROTOCOL.md` → Phase 0 hard gates and `docs/self-evident-ui.md`.)
 
 ---
 
@@ -25,6 +25,26 @@ The brief is approved when every field is filled, every "Open questions" item is
 **What problem it solves**: [The failure mode it prevents or the capability it adds. Be specific — "saves time" is not a problem statement.]
 
 **Why now**: [The constraint or opportunity that makes this the right thing to build at this moment, not next quarter.]
+
+---
+
+## Core loop
+
+> **Phase 0 hard gate.** Exactly one sentence. The brief cannot be approved without it. See `docs/self-evident-ui.md` §1.
+
+The primary repeating cycle the main user performs to get this app's value — the verbs that feed back into each other. Write it as:
+
+> *"The [user role] [does X] → [does Y] → [does Z], and repeats."*
+
+**Core loop**: [One sentence. Name the real human by role. Must be a cycle, not a one-time setup task. If it takes two sentences, you may have two loops — run the test below.]
+
+## One app or two?
+
+> **Phase 0 hard gate.** Must be owner-confirmed. See `docs/self-evident-ui.md` §3.
+
+Does this product have exactly one core loop, or more than one? If a second independent cycle appears (different primary user, different value, doesn't feed back into the loop above), flag it and decide with the owner whether it belongs in a separate app.
+
+**Outcome** (owner-confirmed): [ `One loop, one app` | `Two+ loops — decided to keep as one because: [reason]` | `Two+ loops — splitting [the second loop] into a separate app` ]
 
 ---
 

@@ -192,6 +192,7 @@ If you're using Cursor, add `PROJECT_PROTOCOL.md` as a [Cursor Rule](https://doc
 | `docs/versioning.md` | Semantic versioning rules + changelog format | Yes |
 | `docs/roadmap.md` | Feature tracking template | No |
 | `docs/spec-writing-guide.md` | How to write Haiku-ready feature specs | Yes |
+| `docs/self-evident-ui.md` | UI-to-core-loop alignment standard — core-loop definition gate, screen-to-loop rule, named UI principles + build order | Yes |
 | `docs/secrets.md` | Secret management and rotation procedures | Yes |
 | `docs/migration-waves.md` | n8n → Hono migration planning template | No |
 | `.claude/commands/qa.md` | `/qa` — runs the agent-verification standard against the app | Yes |

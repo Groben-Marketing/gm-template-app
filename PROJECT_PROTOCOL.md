@@ -57,7 +57,7 @@ State that lets a fresh agent pick up cold lives in `git log`, open GitHub issue
 
 ## Phase Gates
 
-Every task moves through five phases. Do not skip phases. Do not advance without sign-off.
+Every task moves through these phases. Do not skip phases. Do not advance without sign-off.
 
 > **Where the gate applies**: Phase 0 (Brief) and Phase 0.5 (Milestones) are required for **new repos** created from this template, and for **existing repos starting new major scope** — a v2.0, a new milestone, a product pivot. They are *not* required retroactively for repos already past v0.1 with established roadmap entries.
 >
@@ -81,6 +81,13 @@ The Phase Zero gate exists to prevent agents from jumping into roadmap entries, 
 3. Resolve every "Open questions" item. Unresolved questions either get answers or move to *Boundaries — OUT of scope* with a deferral reason.
 4. Owner reviews; checks the **Approved** box with date and name.
 5. Only then proceed to Phase 0.5.
+
+**Two hard gates block Phase 0 approval** (in addition to the "every field filled, every question resolved" rule). Both are recorded in `docs/project-brief.md`; the rationale and definitions live in `docs/self-evident-ui.md`:
+
+- **(a) Core loop in one sentence.** The brief's *Core loop* field must state, in exactly one sentence, the primary repeating cycle the main user performs to get the app's value. A blank, multi-sentence, or non-cyclic core loop blocks approval. This exists because the recurring failure across apps is a UI whose information architecture doesn't mirror the core loop — you cannot align to a loop you never wrote down.
+- **(b) The "one app or two?" test.** The brief's *One app or two?* field must record the outcome of this test: if the product has more than one core loop (two independent cycles, different primary users, or different value), **flag it and ask the owner whether it should be split into a separate app.** Do not silently build one app around two loops. The field is answered when the owner confirms either "one loop, one app" or an explicit decision to keep/split.
+
+Until both fields are filled and the second is owner-confirmed, the brief cannot be approved.
 
 **For existing repos taking on new major scope** (v2.0, new milestone, pivot):
 
@@ -108,6 +115,22 @@ After brief approval, before any roadmap entries are written:
 - Can each piece function by itself, stand by itself, and fail by itself?
 
 **Sign-off phrase**: "Map is clear."
+
+### Phase 1.5: Wireframe
+
+> Applies whenever the work introduces **new screens or materially changes a screen's layout/flow**. Pure backend, data, or refactor work skips this phase. Like Phase 0/0.5, it's a product-structure gate, not a per-commit ceremony.
+
+Before any production UI is written, map every screen to its core-loop step in **lo-fi** — a sketch, ASCII block, markdown list of screens, or a wireframe tool. This is where UI-to-loop alignment (`docs/self-evident-ui.md` §2) is verified cheaply, before expensive production UI exists.
+
+For each screen, the wireframe must state:
+
+- **Which core-loop step it advances** (one step — see `docs/self-evident-ui.md` §1). A screen that maps to no loop step, or blends several, is caught and fixed here, not after it's built.
+- **What the user does next** and how that next step is surfaced (ties to the Nav & Orientation Standard's `doNow` / `CountBadge`).
+- **The empty state** — what teaches the user when there's no data yet.
+
+If a screen can't be tied to a single loop step, either the screen is wrong or the core loop in the brief is wrong — resolve it before building.
+
+**Sign-off phrase**: "Wireframes are aligned."
 
 ### Phase 2: Issue
 
