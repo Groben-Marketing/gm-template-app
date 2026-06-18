@@ -184,7 +184,9 @@ Run this before marking a spec ready for Haiku:
 - [ ] Auth approach is stated explicitly (direct Supabase / Hono + JWT / Hono + PIN / none)
 - [ ] Every UI state is described: loading, success, error, empty
 - [ ] If the feature adds or reworks a screen, the spec names **which core-loop step it advances** (`docs/self-evident-ui.md` §2) — and that screen passed Phase 1.5 wireframe alignment
-- [ ] Shared components are named (`Toast`, `EmptyState`, `Badge`, `ConfirmDialog`, `LoadingSkeleton`)
+- [ ] **Fault isolation** (`docs/fault-isolation-standard.md`): a new view is `ErrorBoundary`-wrapped; a new outbound call is time-boxed (`api`/`callExternal`) with a degraded mode named; a new job is bulkheaded
+- [ ] **Efficiency** (`docs/efficiency-standard.md`): a new list states pagination + selected columns; a new filtered/sorted/RLS column states its index; a new external call states how it stays under the rate limit
+- [ ] Shared components are named (`Toast`, `EmptyState`, `Badge`, `ConfirmDialog`, `LoadingSkeleton`, `ErrorBoundary`)
 - [ ] "Do NOT" covers the most likely wrong turns for this specific feature
 - [ ] The Haiku Checklist items are concrete things to build, not goals ("add PATCH handler to `server/routes/items.ts`" not "implement archiving")
 - [ ] Agent Verify lists only mechanically checkable assertions; Human Verify lists only judgment calls (see *Writing the Verify Sections*)

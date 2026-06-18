@@ -123,10 +123,12 @@ This app ships the R7C Nav & Orientation Standard via the template shell. Full g
 These apply to every feature unless explicitly overridden:
 
 - **Verification**: agents self-verify per `docs/agent-verification.md` before presenting work.
-- **Error handling**: Never show a blank screen or raw error. Every failed fetch, timeout, and edge case gets a user-facing message. Use Toast for transient errors, EmptyState for "no data" states, and a fallback UI for unexpected crashes.
+- **Error handling**: Never show a blank screen or raw error. Every failed fetch, timeout, and edge case gets a user-facing message. Use Toast for transient errors, EmptyState for "no data" states, and the `ErrorBoundary` (`src/components/ErrorBoundary.tsx`) for unexpected crashes. See `docs/fault-isolation-standard.md`.
+- **Fault isolation**: A failure stays in the unit that failed — it never cascades. Views render inside `ErrorBoundary`; backend calls go through the time-boxed `src/lib/api.ts`; third-party calls go through `callExternal()`; jobs are bulkheaded. See `docs/fault-isolation-standard.md`.
 - **Data protection**: Row-level security on every table. Service-role credentials stay in the Hono server (`.env`) — never in the SPA. Never log emails, tokens, or payment info. See `docs/secrets.md` for rotation procedures.
-- **Scale expectation**: [State it — e.g., "10-50 internal users" or "500+ public signups".]
-- **Separation of concerns**: Every component, route, and integration must function by itself, stand by itself, and fail by itself.
+- **Scale expectation**: [State it — e.g., "10-50 internal users" or "500+ public signups".] This number is the efficiency budget — it decides what needs pagination, indexing, and rate limiting now. See `docs/efficiency-standard.md`.
+- **Efficiency**: No N+1 queries, no `select('*')` on growing tables, lists paginate, hot/RLS columns are indexed. See `docs/efficiency-standard.md`.
+- **Separation of concerns**: Every component, route, and integration must function by itself, stand by itself, and fail by itself — the third clause now carries runtime obligations (`docs/fault-isolation-standard.md`).
 
 ---
 

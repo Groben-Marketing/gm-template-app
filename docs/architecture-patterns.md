@@ -166,7 +166,9 @@ Every component, module, or route must answer YES to:
 
 ### In practice
 
-- **Views**: Each view loads its own data and manages its own state
-- **Components**: Receive all data via props, never call APIs directly
-- **Hono routes**: One route file per resource, self-contained
+- **Views**: Each view loads its own data and manages its own state — and renders inside an `ErrorBoundary` so its crash can't blank the app (`docs/fault-isolation-standard.md`).
+- **Components**: Receive all data via props, never call APIs directly (also prevents duplicate fetch storms — `docs/efficiency-standard.md`).
+- **Hono routes**: One route file per resource, self-contained. Third-party calls go through a time-boxed wrapper (`callExternal`) so a hung dependency can't cascade.
 - **Shared logic**: Extracted to `lib/` (SPA) or `server/lib/` (API)
+
+> **Runtime isolation & efficiency are their own standards.** The "fail by itself" clause is operationalized in `docs/fault-isolation-standard.md` (error boundary, outbound timeouts/retry, bulkheaded jobs); query/index/pagination/rate-limit rules live in `docs/efficiency-standard.md`.

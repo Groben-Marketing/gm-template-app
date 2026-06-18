@@ -4,6 +4,7 @@ import { TopNav, type NavItem } from './components/TopNav';
 import { PageHeading } from './components/PageHeading';
 import { EmptyState } from './components/EmptyState';
 import { Breadcrumb } from './components/Breadcrumb';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { HomeView } from './views/Home';
 import {
     APP_NAME,
@@ -86,7 +87,13 @@ function App() {
                 onSignOut={() => alert('Wire onSignOut to supabase signOut().')}
             />
             <main>
-                {renderView()}
+                {/* Fault-Isolation Standard: each view renders inside its own
+                    boundary, keyed by route so navigating clears a prior crash.
+                    A render error in one view degrades to a recoverable fallback
+                    instead of blanking the whole SPA. */}
+                <ErrorBoundary key={view} label={view}>
+                    {renderView()}
+                </ErrorBoundary>
             </main>
         </div>
     );
@@ -185,4 +192,11 @@ function ReferenceView() {
     );
 }
 
-render(<App />, document.getElementById('app')!);
+// Root boundary — the last line of defense. If the shell itself throws, the
+// user still gets a recoverable screen, never a blank white page.
+render(
+    <ErrorBoundary>
+        <App />
+    </ErrorBoundary>,
+    document.getElementById('app')!,
+);

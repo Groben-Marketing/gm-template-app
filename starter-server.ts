@@ -26,6 +26,45 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 // Service-role client — for server-side operations that bypass RLS
 const sbAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
+// ─── External-Call Guard (Fault-Isolation Standard) ──────
+// Every outbound call to a third-party (Resend, Frame.io, Anthropic, …) MUST be
+// time-boxed so a hung dependency can't pin a request open or exhaust the event
+// loop. Idempotent GETs retry with backoff; a failing call returns a handled
+// error to the caller — it never cascades into a process crash.
+// See docs/fault-isolation-standard.md. Usage:
+//   const res = await callExternal('https://api.resend.com/emails',
+//       { method: 'POST', headers: {...}, body: JSON.stringify(payload) });
+export async function callExternal(
+    url: string,
+    init: RequestInit & { timeoutMs?: number; retries?: number } = {},
+): Promise<Response> {
+    const method = (init.method ?? 'GET').toUpperCase();
+    const { timeoutMs = 8000, retries = method === 'GET' ? 2 : 0, ...rest } = init;
+    let lastErr: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        try {
+            const res = await fetch(url, { ...rest, signal: ctrl.signal });
+            if (!res.ok && res.status >= 500 && attempt < retries) {
+                lastErr = new Error(`upstream ${res.status} from ${url}`);
+                await new Promise((r) => setTimeout(r, 300 * 2 ** attempt));
+                continue;
+            }
+            return res;
+        } catch (err) {
+            lastErr = err;
+            if (attempt < retries) {
+                await new Promise((r) => setTimeout(r, 300 * 2 ** attempt));
+                continue;
+            }
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+    throw lastErr instanceof Error ? lastErr : new Error(`external call failed: ${url}`);
+}
+
 // ─── App Setup ───────────────────────────────────────────
 const app = new Hono();
 
@@ -165,14 +204,22 @@ app.delete('/api/items/:id', async (c) => {
 //     return c.json({ ok: true });
 // });
 
-// ─── Scheduled Jobs ─────────────────────────────────────
+// ─── Scheduled Jobs (bulkheaded) ────────────────────────
 // npm install node-cron
+//
+// Fault-Isolation Standard: a throw in a background job must NOT take the server
+// down. Every cron body is wrapped in try/catch so the job "fails by itself" —
+// it logs and the next tick runs clean. Use callExternal() for any outbound call.
 //
 // import cron from 'node-cron';
 //
 // cron.schedule('0 17 * * 5', async () => {  // Every Friday at 5pm
-//     console.log('[cron] Friday job running');
-//     try { /* your logic */ } catch (err) { console.error('[cron] Failed:', (err as Error).message); }
+//     try {
+//         const res = await callExternal('https://api.example.com/run', { method: 'POST' });
+//         if (!res.ok) throw new Error(`run failed: ${res.status}`);
+//     } catch (err) {
+//         console.error('[cron] Friday job failed (isolated, server still up):', (err as Error).message);
+//     }
 // });
 
 // ─── Error Handler ───────────────────────────────────────
@@ -210,3 +257,12 @@ function shutdown(signal: string) {
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
+
+// ─── Process-level fault isolation (bulkhead) ────────────
+// A rejected promise that nobody awaited (a fire-and-forget background task)
+// must not crash the server. Log it and keep serving — the failed task fails by
+// itself. (A truly broken-state uncaughtException is left to crash so the
+// orchestrator restarts the container cleanly — don't swallow those.)
+process.on('unhandledRejection', (reason) => {
+    console.error('[unhandledRejection] background task failed (server still up):', reason);
+});

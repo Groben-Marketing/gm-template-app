@@ -57,5 +57,7 @@
 - `PROJECT_PROTOCOL.md` — Operating rules and phase gates
 - `CLAUDE.md` — App-specific context for Claude Code
 - `docs/self-evident-ui.md` — UI-to-core-loop alignment standard (core-loop gate, screen-to-loop rule, build order)
+- `docs/efficiency-standard.md` — Efficiency doctrine (query/index/pagination/caching/rate-limit rules + scale-expectation gate)
+- `docs/fault-isolation-standard.md` — Fault-isolation doctrine ("fail by itself" runtime rules + shipped primitives)
 - `docs/decisions.md` — Lessons learned and key fixes
 - `docs/roadmap.md` — Milestones and feature tracking
