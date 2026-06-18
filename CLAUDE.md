@@ -104,7 +104,7 @@ Follow `docs/migration-checklist.md` for step-by-step process. Dev branch: `dev/
 
 ## Nav & Orientation Standard (non-negotiable)
 
-This app ships the R7C Nav & Orientation Standard via the template shell. Full guide: `README.md` → *Nav & Orientation Standard*. The rules that bind every feature you add:
+This app ships the R7C Nav & Orientation Standard via the template shell. Full guide: `README.md` → *Nav & Orientation Standard*. This standard governs *how* each screen is wired; for *what the screens are and how they map to the core loop*, see `docs/self-evident-ui.md` (the layer above this one). The rules that bind every feature you add:
 
 1. Every authed view renders inside the shell — sticky `TopNav` header, logo links home.
 2. **No orphan routes**: every new route goes into some `NAV_ITEMS` entry's `match[]` (nested views ride on their parent's match). ≤5 top-level items; group sub-pages with dropdown `children`.

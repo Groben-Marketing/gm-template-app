@@ -183,6 +183,7 @@ Run this before marking a spec ready for Haiku:
 - [ ] Table names and column names are spelled out
 - [ ] Auth approach is stated explicitly (direct Supabase / Hono + JWT / Hono + PIN / none)
 - [ ] Every UI state is described: loading, success, error, empty
+- [ ] If the feature adds or reworks a screen, the spec names **which core-loop step it advances** (`docs/self-evident-ui.md` §2) — and that screen passed Phase 1.5 wireframe alignment
 - [ ] Shared components are named (`Toast`, `EmptyState`, `Badge`, `ConfirmDialog`, `LoadingSkeleton`)
 - [ ] "Do NOT" covers the most likely wrong turns for this specific feature
 - [ ] The Haiku Checklist items are concrete things to build, not goals ("add PATCH handler to `server/routes/items.ts`" not "implement archiving")

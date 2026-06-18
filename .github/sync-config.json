@@ -9,6 +9,7 @@
     "docs/agent-verification.md",
     "docs/ai-collaboration.md",
     "docs/spec-writing-guide.md",
+    "docs/self-evident-ui.md",
     ".claude/commands/qa.md",
     ".claude/commands/work-issue.md",
     "scripts/verify.sh"
