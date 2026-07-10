@@ -37,7 +37,7 @@
 ### Setup
 
 - [ ] Create `server/` directory
-- [ ] Copy `starter-server.ts` → `server/index.ts`, customize
+- [ ] Customize `server/index.ts` (the Hono server ships in the template — no copy step), wire your routes
 - [ ] Install: `npm install hono @hono/node-server @supabase/supabase-js`
 - [ ] Install dev: `npm install -D typescript tsx`
 - [ ] Install if needed: `npm install node-cron` (for cron workflows)

@@ -16,6 +16,22 @@ The `/qa` command (`.claude/commands/qa.md`) executes this standard. Run it; don
 
 ---
 
+## Verify the real app — never a wireframe or mockup
+
+> **The app is `src/` (Preact SPA) + `server/` (Hono API) + `supabase/` (schema). That is the only thing you verify.**
+
+A gm-template repo often *also* contains design artifacts — Claude Design exports (`*.dc.html`), static wireframes, or a `docs/prototype/` / `docs/mockups/` folder. **Those are pictures of the app, not the app.** They render without the server or the database; buttons may look wired but do nothing. Verifying against one of them and reporting "it works" is the single most damaging way this standard fails — it certifies decoration as a working feature.
+
+Before you walk anything, confirm you are driving the running app:
+
+1. **You loaded a URL served by the app's own server** — the Vite dev server (`:5173`) or the Hono server (`:3000`/`/health` answers), **not** a `file://` path, not an `*.dc.html`, not a file under `docs/`.
+2. **A real action changed real state** — a create/edit hit `/api/*` and the row persisted (re-load shows it; or it's visible in Supabase). If nothing round-trips to the backend, you are looking at a mockup.
+3. **"Is the app even built?"** — if `server/` or `supabase/` is missing, or `git ls-files` shows only `docs/` + design exports, the app does **not** exist yet. Do not verify a design prototype and call the feature done — say the app isn't built and stop.
+
+If any of these fail, the verification is invalid regardless of how the page looks.
+
+---
+
 ## Required Checks — UI or Route Changes
 
 After **any change affecting UI or routes**, all five:

@@ -25,6 +25,8 @@ Read `package.json` scripts. Template defaults (adjust ONLY if this repo's scrip
 
 Check whether the servers are already running (`/health` on the API port; HTTP 200 on the Vite port). Start whichever is missing as a background task and confirm it's up before proceeding.
 
+**Confirm you're about to drive the REAL app, not a mockup** (see `docs/agent-verification.md` → *Verify the real app*): the URL you walk must be served by the Vite dev server or the Hono server — never a `file://` path, an `*.dc.html`, or anything under `docs/prototype/` / `docs/mockups/`. If `server/` or `supabase/` doesn't exist, the app isn't built — stop and say so rather than verifying a design export.
+
 ## 3. Walk the affected views (UI/routes only)
 
 Using your browser tooling, for **every** affected view:

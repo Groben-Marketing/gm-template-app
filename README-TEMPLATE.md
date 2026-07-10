@@ -9,6 +9,8 @@
 **Backend**: Hono API (via tsx) · Supabase (Postgres + Auth + RLS)
 **Deploy**: Docker container · Global Caddy handles TLS + routing
 
+> **This app is `src/` + `server/` + `supabase/`.** Anything under `docs/` — Claude Design exports (`*.dc.html`), wireframes, `docs/prototype/`, `docs/mockups/` — is a **design reference, not the app**. It renders without a server or database and nothing it shows is wired. Never treat a design export as the deliverable, and never verify a feature against one (see `docs/agent-verification.md`). When in doubt "is this built?": if `server/` and `supabase/` exist and `npm run dev` serves working `/api/*`, it's real; if the repo is only docs + design exports, it isn't built yet.
+
 ## Quick Start
 
 ### Prerequisites

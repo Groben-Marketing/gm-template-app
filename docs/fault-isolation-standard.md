@@ -29,13 +29,13 @@ Every unit (view, route, integration, job) must answer **all three** of the Sepa
 ## §3 — Outbound calls are time-boxed and degrade
 
 - **Every call to the backend goes through `src/lib/api.ts`**, which time-boxes each request (10s `AbortController`) and retries idempotent **GETs** with backoff. **Writes never auto-retry** (a retried POST can double-submit). A caller may pass an `AbortSignal` to cancel on unmount/route-change.
-- **Every server-side call to a third party goes through `callExternal()`** (`starter-server.ts`) or an equivalent guarded wrapper — timeout (8s default) + backoff retry for GETs. A hung Resend/Frame.io/Anthropic call must not pin a request open or exhaust the event loop.
+- **Every server-side call to a third party goes through `callExternal()`** (`server/index.ts`) or an equivalent guarded wrapper — timeout (8s default) + backoff retry for GETs. A hung Resend/Frame.io/Anthropic call must not pin a request open or exhaust the event loop.
 - **Degrade, don't cascade.** When an external dependency fails, return a handled error and a degraded mode (queue-and-retry, cached value, "try again later") — defined per integration in the brief's **Integration Risks** table.
 - **No uncontrolled third-party on the critical path** (`PROJECT_PROTOCOL.md`, Phase 2). If an integration's only fallback is "stop the world," it's flagged in the brief and reconsidered — that's a single point of total failure.
 
 ## §4 — Bulkheading: background work fails alone
 
-- **Every cron/scheduled job body is wrapped in try/catch** so a throw logs and the next tick runs clean — the job fails by itself, the server stays up (`starter-server.ts` cron pattern).
+- **Every cron/scheduled job body is wrapped in try/catch** so a throw logs and the next tick runs clean — the job fails by itself, the server stays up (`server/index.ts` cron pattern).
 - **Webhook handlers catch their own errors** and return a handled response; a malformed payload returns 4xx, it doesn't crash the route.
 - **Process-level guard**: an unawaited rejected promise (fire-and-forget task) is logged, not fatal (`process.on('unhandledRejection')`). A genuinely broken-state `uncaughtException` is deliberately left to crash so the orchestrator restarts the container cleanly — don't swallow those.
 - **`app.onError()`** catches any uncaught request exception → 500 with no internal details, containing it to that one request.
@@ -53,8 +53,8 @@ Every unit (view, route, integration, job) must answer **all three** of the Sepa
 |-----------|------|-----------|
 | `ErrorBoundary` | `src/components/ErrorBoundary.tsx` | §2 — view crash containment |
 | Time-boxed/retrying API client | `src/lib/api.ts` (`api`/`get`/`post`/…, `ApiError`) | §3 — backend-call isolation |
-| `callExternal()` | `starter-server.ts` | §3 — third-party-call isolation |
-| Bulkheaded cron + `unhandledRejection` guard | `starter-server.ts` | §4 — background-work isolation |
+| `callExternal()` | `server/index.ts` | §3 — third-party-call isolation |
+| Bulkheaded cron + `unhandledRejection` guard | `server/index.ts` | §4 — background-work isolation |
 | `Toast` / `EmptyState` | `src/components/` | §2 — graceful degradation surfaces |
 
 ---
