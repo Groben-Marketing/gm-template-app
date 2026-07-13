@@ -15,6 +15,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 ### Fixed
 ### Removed
 
+## [1.7.1] - 2026-07-13
+
+### Changed
+- Renamed the "Reference" nav item to "How To" (R7C nav-standard label update). Display-label only — the reference route, view, and icon are unchanged, so apps built from the template inherit the new label.
+
 ## [1.7.0] - 2026-06-18
 ### Added
 - **`docs/self-evident-ui.md`** — the Self-Evident UI Standard. Bakes one principle into the template core: an app's screens must mirror its core loop, or the app stops being self-evident and starts requiring human training. Enforceable rules, not prose: §1 a mandatory one-sentence core-loop definition; §2 the UI-to-loop alignment rule (every screen advances exactly one loop step), anchored to Norman's gulfs of execution/evaluation + Nielsen heuristic #2; §3 the named UI principles (self-evidence/Krug, IA/Rosenfeld-Morville, progressive disclosure, empty-states-as-teaching, contextual help, FRE, coachmarks, "one app or two?") each with a one-line definition and build-order rank; §4 the "self-evident before explained" hard build order (structure → contextual help → tour → docs) with a fidelity caveat that later tiers are complements, not disposable. Sits one layer above the Nav & Orientation Standard (which it cross-references, not duplicates). Synced downstream.
