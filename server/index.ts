@@ -16,6 +16,7 @@ import { logger } from 'hono/logger';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { serve } from '@hono/node-server';
 import { createClient } from '@supabase/supabase-js';
+import { mountBugReporter } from '@wayfinder/bug-reporter/server';
 
 // ─── Config ──────────────────────────────────────────────
 const PORT = Number(process.env.PORT) || 3000;
@@ -183,6 +184,17 @@ app.get('/api/items', async (c) => {
 
     if (error) return c.json({ error: error.message }, 500);
     return c.json(data);
+});
+
+// Reusable in-app bug reporter (@wayfinder/bug-reporter). Mounts
+// POST /api/bug-report, which receives the browser report, HMAC-signs it, and
+// forwards it to Workbench as a ticket. No-op until the two envs are set, so
+// leaving them blank is safe. Set GITHUB_REPO to this app's repo (resolve key).
+mountBugReporter(app, {
+    url: process.env.WORKBENCH_BUG_WEBHOOK_URL,
+    secret: process.env.WORKBENCH_BUG_SECRET,
+    repo: process.env.GITHUB_REPO,
+    appName: process.env.APP_NAME,
 });
 
 // Example: Create item
