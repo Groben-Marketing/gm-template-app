@@ -5,6 +5,7 @@ import { PageHeading } from './components/PageHeading';
 import { EmptyState } from './components/EmptyState';
 import { Breadcrumb } from './components/Breadcrumb';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { BugModal } from './components/BugModal';
 import { HomeView } from './views/Home';
 import {
     APP_NAME,
@@ -43,6 +44,7 @@ const NAV_ITEMS: NavItem[] = [
 
 function App() {
     const [route, setRoute] = useState(location.hash.slice(1) || 'home');
+    const [bugOpen, setBugOpen] = useState(false);
 
     useEffect(() => {
         const handler = () => setRoute(location.hash.slice(1) || 'home');
@@ -81,8 +83,9 @@ function App() {
                 portalHomeUrl={PORTAL_HOME_URL}
                 changelogHref={CHANGELOG_HREF}
                 referenceHref={REFERENCE_HREF}
-                // Wire to your bug-report flow (GitHub issue form, mailto, modal…)
-                onBugReport={() => alert('Wire onBugReport to your bug-report flow.')}
+                // Reusable bug reporter (@wayfinder/bug-reporter) — opens the modal,
+                // which POSTs to /api/bug-report (server signs + forwards to Workbench).
+                onBugReport={() => setBugOpen(true)}
                 // Real app: import { signOut } from './lib/supabase' and reload.
                 onSignOut={() => alert('Wire onSignOut to supabase signOut().')}
             />
@@ -95,6 +98,7 @@ function App() {
                     {renderView()}
                 </ErrorBoundary>
             </main>
+            {bugOpen && <BugModal buildTag={BUILD_TAG} onClose={() => setBugOpen(false)} />}
         </div>
     );
 }

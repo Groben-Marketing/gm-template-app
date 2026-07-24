@@ -16,7 +16,8 @@
   "dependencies": {
     "hono": "^4.0.0",
     "@hono/node-server": "^1.0.0",
-    "@supabase/supabase-js": "^2.0.0"
+    "@supabase/supabase-js": "^2.0.0",
+    "@wayfinder/bug-reporter": "github:Wayfinder-Digital/bug-reporter#v0.1.0"
   },
   "optionalDependencies": {
     "node-cron": "^3.0.0"
